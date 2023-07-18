@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/fonts/Unifont点阵黑13.0.01.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://script/about.gd" type="Script" id=2]
+
+[sub_resource type="DynamicFont" id=2]
+size = 32
+use_filter = true
+extra_spacing_bottom = 40
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+font_data = ExtResource( 1 )
+
+[node name="about" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+margin_left = 64.0
+margin_top = 72.0
+margin_right = 1216.0
+margin_bottom = 640.0
+custom_fonts/normal_font = SubResource( 2 )
+text = "游戏介绍：
+	使用键盘的方向键或者【A、S、D、W】字母键控制角色上下左右移动。
+	推动箱子到目的位置，游戏完成后可选下一关或者返回主菜单界面，也可以在游戏中通过上一关和下一关按键选择游戏的关卡。
+	游戏素材下载自免费游戏素材网站：https://kenney.nl/
+	游戏关卡来自：http://sokoban.cn/ 中的经典关卡，共238关。
+	关卡和其他的内容将逐步更新。
+	一个人独立游戏制作不容易，如果您有心，可以捐赠支持一下。"
+
+[node name="Button" type="Button" parent="."]
+margin_left = 600.0
+margin_top = 672.0
+margin_right = 692.0
+margin_bottom = 710.0
+custom_fonts/font = SubResource( 1 )
+text = "返 回"
+
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

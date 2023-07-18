@@ -1,0 +1,49 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://script/LevelCheck.gd" type="Script" id=1]
+[ext_resource path="res://scene/dest.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scene/play.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scene/MainScene.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scene/TileMap.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scene/box.tscn" type="PackedScene" id=6]
+
+[node name="Level10" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="MainScene" parent="." instance=ExtResource( 4 )]
+
+[node name="TileMap" parent="." instance=ExtResource( 5 )]
+tile_data = PoolIntArray( 131078, 0, 0, 131079, 0, 0, 131080, 0, 0, 131081, 0, 0, 131082, 0, 0, 131083, 0, 0, 196614, 0, 0, 196619, 0, 0, 262148, 0, 0, 262149, 0, 0, 262150, 0, 0, 262155, 0, 0, 327684, 0, 0, 327691, 0, 0, 393220, 0, 0, 393226, 0, 0, 393227, 0, 0, 458756, 0, 0, 458757, 0, 0, 458758, 0, 0, 458759, 0, 0, 458762, 0, 0, 524295, 0, 0, 524296, 0, 0, 524297, 0, 0, 524298, 0, 0 )
+
+[node name="dest" parent="." instance=ExtResource( 2 )]
+position = Vector2( 448, 384 )
+
+[node name="dest2" parent="." instance=ExtResource( 2 )]
+position = Vector2( 512, 384 )
+
+[node name="dest3" parent="." instance=ExtResource( 2 )]
+position = Vector2( 576, 384 )
+
+[node name="dest4" parent="." instance=ExtResource( 2 )]
+position = Vector2( 576, 320 )
+
+[node name="dest5" parent="." instance=ExtResource( 2 )]
+position = Vector2( 512, 320 )
+
+[node name="play" parent="." instance=ExtResource( 3 )]
+position = Vector2( 320, 320 )
+
+[node name="box" parent="." instance=ExtResource( 6 )]
+position = Vector2( 384, 384 )
+
+[node name="box2" parent="." instance=ExtResource( 6 )]
+position = Vector2( 448, 320 )
+
+[node name="box3" parent="." instance=ExtResource( 6 )]
+position = Vector2( 448, 256 )
+
+[node name="box4" parent="." instance=ExtResource( 6 )]
+position = Vector2( 512, 256 )
+
+[node name="box5" parent="." instance=ExtResource( 6 )]
+position = Vector2( 576, 256 )

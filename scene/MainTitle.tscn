@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/fonts/Unifont点阵黑13.0.01.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://script/MainTitle.gd" type="Script" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 160
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 24
+font_data = ExtResource( 1 )
+
+[node name="MainTitle" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="."]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 400.0
+margin_top = 96.0
+margin_right = 880.0
+margin_bottom = 419.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Godot
+Boxman"
+align = 1
+uppercase = true
+
+[node name="new" type="Button" parent="."]
+margin_left = 568.0
+margin_top = 512.0
+margin_right = 712.0
+margin_bottom = 542.0
+custom_fonts/font = SubResource( 2 )
+text = "新 的 游 戏"
+flat = true
+
+[node name="change" type="Button" parent="."]
+margin_left = 568.0
+margin_top = 555.0
+margin_right = 712.0
+margin_bottom = 585.0
+custom_fonts/font = SubResource( 2 )
+text = "游 戏 选 关"
+flat = true
+
+[node name="about" type="Button" parent="."]
+margin_left = 585.0
+margin_top = 599.0
+margin_right = 693.0
+margin_bottom = 629.0
+custom_fonts/font = SubResource( 2 )
+text = "关    于"
+flat = true
+
+[node name="exit" type="Button" parent="."]
+margin_left = 568.0
+margin_top = 640.0
+margin_right = 712.0
+margin_bottom = 670.0
+custom_fonts/font = SubResource( 2 )
+text = "退 出 游 戏"
+flat = true
+
+[connection signal="pressed" from="new" to="." method="_on_new_pressed"]
+[connection signal="pressed" from="change" to="." method="_on_change_pressed"]
+[connection signal="pressed" from="about" to="." method="_on_about_pressed"]
+[connection signal="pressed" from="exit" to="." method="_on_exit_pressed"]
