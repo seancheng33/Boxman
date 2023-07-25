@@ -1,17 +1,72 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=62 format=2]
 
-[ext_resource path="res://assets/level_image/level05.png" type="Texture" id=1]
-[ext_resource path="res://assets/level_image/level03.png" type="Texture" id=2]
-[ext_resource path="res://assets/level_image/level04.png" type="Texture" id=3]
-[ext_resource path="res://assets/level_image/level02.png" type="Texture" id=4]
-[ext_resource path="res://assets/level_image/level01.png" type="Texture" id=5]
+[ext_resource path="res://assets/level_image/Level003.png" type="Texture" id=1]
+[ext_resource path="res://assets/level_image/Level002.png" type="Texture" id=2]
+[ext_resource path="res://assets/level_image/Level001.png" type="Texture" id=3]
+[ext_resource path="res://assets/level_image/Level028.png" type="Texture" id=4]
+[ext_resource path="res://assets/level_image/Level030.png" type="Texture" id=5]
 [ext_resource path="res://script/levelchoice.gd" type="Script" id=6]
-[ext_resource path="res://assets/level_image/level07.png" type="Texture" id=7]
-[ext_resource path="res://assets/level_image/level06.png" type="Texture" id=8]
+[ext_resource path="res://assets/level_image/Level029.png" type="Texture" id=7]
+[ext_resource path="res://assets/level_image/Level021.png" type="Texture" id=8]
+[ext_resource path="res://assets/level_image/Level019.png" type="Texture" id=9]
+[ext_resource path="res://assets/level_image/Level020.png" type="Texture" id=10]
+[ext_resource path="res://assets/level_image/Level024.png" type="Texture" id=11]
+[ext_resource path="res://assets/level_image/Level022.png" type="Texture" id=12]
+[ext_resource path="res://assets/level_image/Level025.png" type="Texture" id=13]
+[ext_resource path="res://assets/level_image/Level023.png" type="Texture" id=14]
+[ext_resource path="res://assets/level_image/Level026.png" type="Texture" id=15]
+[ext_resource path="res://assets/level_image/Level027.png" type="Texture" id=16]
+[ext_resource path="res://assets/level_image/Level018.png" type="Texture" id=17]
+[ext_resource path="res://assets/level_image/Level012.png" type="Texture" id=18]
+[ext_resource path="res://assets/level_image/Level016.png" type="Texture" id=19]
+[ext_resource path="res://assets/level_image/Level017.png" type="Texture" id=20]
+[ext_resource path="res://assets/level_image/Level009.png" type="Texture" id=21]
+[ext_resource path="res://assets/level_image/Level004.png" type="Texture" id=22]
+[ext_resource path="res://assets/level_image/Level007.png" type="Texture" id=23]
+[ext_resource path="res://assets/level_image/Level010.png" type="Texture" id=24]
+[ext_resource path="res://assets/level_image/Level008.png" type="Texture" id=25]
+[ext_resource path="res://assets/level_image/Level013.png" type="Texture" id=26]
+[ext_resource path="res://assets/level_image/Level014.png" type="Texture" id=27]
+[ext_resource path="res://assets/level_image/Level015.png" type="Texture" id=28]
+[ext_resource path="res://assets/level_image/Level006.png" type="Texture" id=29]
+[ext_resource path="res://assets/level_image/Level005.png" type="Texture" id=30]
+[ext_resource path="res://assets/level_image/Level011.png" type="Texture" id=31]
+[ext_resource path="res://assets/level_image/Level031.png" type="Texture" id=32]
+[ext_resource path="res://assets/level_image/Level032.png" type="Texture" id=33]
+[ext_resource path="res://assets/level_image/Level033.png" type="Texture" id=34]
+[ext_resource path="res://assets/level_image/Level034.png" type="Texture" id=35]
+[ext_resource path="res://assets/level_image/Level056.png" type="Texture" id=36]
+[ext_resource path="res://assets/level_image/Level055.png" type="Texture" id=37]
+[ext_resource path="res://assets/level_image/Level057.png" type="Texture" id=38]
+[ext_resource path="res://assets/level_image/Level058.png" type="Texture" id=39]
+[ext_resource path="res://assets/level_image/Level036.png" type="Texture" id=40]
+[ext_resource path="res://assets/level_image/Level042.png" type="Texture" id=41]
+[ext_resource path="res://assets/level_image/Level043.png" type="Texture" id=42]
+[ext_resource path="res://assets/level_image/Level053.png" type="Texture" id=43]
+[ext_resource path="res://assets/level_image/Level049.png" type="Texture" id=44]
+[ext_resource path="res://assets/level_image/Level059.png" type="Texture" id=45]
+[ext_resource path="res://assets/level_image/Level047.png" type="Texture" id=46]
+[ext_resource path="res://assets/level_image/Level035.png" type="Texture" id=47]
+[ext_resource path="res://assets/level_image/Level051.png" type="Texture" id=48]
+[ext_resource path="res://assets/level_image/Level040.png" type="Texture" id=49]
+[ext_resource path="res://assets/level_image/Level050.png" type="Texture" id=50]
+[ext_resource path="res://assets/level_image/Level052.png" type="Texture" id=51]
+[ext_resource path="res://assets/level_image/Level044.png" type="Texture" id=52]
+[ext_resource path="res://assets/level_image/Level039.png" type="Texture" id=53]
+[ext_resource path="res://assets/level_image/Level060.png" type="Texture" id=54]
+[ext_resource path="res://assets/level_image/Level041.png" type="Texture" id=55]
+[ext_resource path="res://assets/level_image/Level037.png" type="Texture" id=56]
+[ext_resource path="res://assets/level_image/Level038.png" type="Texture" id=57]
+[ext_resource path="res://assets/level_image/Level046.png" type="Texture" id=58]
+[ext_resource path="res://assets/level_image/Level054.png" type="Texture" id=59]
+[ext_resource path="res://assets/level_image/Level045.png" type="Texture" id=60]
+[ext_resource path="res://assets/level_image/Level048.png" type="Texture" id=61]
 
 [node name="levelchoice" type="Panel"]
-margin_right = 1152.0
-margin_bottom = 7000.0
+margin_left = 64.0
+margin_top = 64.0
+margin_right = 1216.0
+margin_bottom = 7064.0
 rect_min_size = Vector2( 1152, 7000 )
 script = ExtResource( 6 )
 
@@ -21,70 +76,600 @@ margin_bottom = 40.0
 
 [node name="Level001" type="Button" parent="Control"]
 margin_left = 64.0
-margin_top = 64.0
-margin_right = 1424.0
-margin_bottom = 1079.0
-rect_scale = Vector2( 0.3, 0.3 )
-icon = ExtResource( 5 )
-icon_align = 1
-expand_icon = true
-
-[node name="Level002" type="Button" parent="Control"]
-margin_left = 576.0
-margin_top = 64.0
-margin_right = 1936.0
-margin_bottom = 1079.0
-rect_scale = Vector2( 0.3, 0.3 )
-icon = ExtResource( 4 )
-icon_align = 1
-expand_icon = true
-
-[node name="Level003" type="Button" parent="Control"]
-margin_left = 64.0
-margin_top = 448.0
-margin_right = 1424.0
-margin_bottom = 1463.0
-rect_scale = Vector2( 0.3, 0.3 )
-icon = ExtResource( 2 )
-icon_align = 1
-expand_icon = true
-
-[node name="Level004" type="Button" parent="Control"]
-margin_left = 576.0
-margin_top = 448.0
-margin_right = 1909.0
-margin_bottom = 1463.0
+margin_top = 56.0
+margin_right = 1077.0
+margin_bottom = 696.0
 rect_scale = Vector2( 0.3, 0.3 )
 icon = ExtResource( 3 )
 icon_align = 1
 expand_icon = true
 
-[node name="Level005" type="Button" parent="Control"]
-margin_left = 64.0
-margin_top = 832.0
-margin_right = 1397.0
-margin_bottom = 1819.0
+[node name="Level002" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 56.0
+margin_right = 1445.0
+margin_bottom = 696.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 2 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level003" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 56.0
+margin_right = 1813.0
+margin_bottom = 696.0
 rect_scale = Vector2( 0.3, 0.3 )
 icon = ExtResource( 1 )
 icon_align = 1
 expand_icon = true
 
-[node name="Level006" type="Button" parent="Control"]
-margin_left = 576.0
-margin_top = 832.0
-margin_right = 1883.0
-margin_bottom = 1819.0
+[node name="Level004" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 328.0
+margin_right = 1077.0
+margin_bottom = 968.0
 rect_scale = Vector2( 0.3, 0.3 )
-icon = ExtResource( 8 )
+icon = ExtResource( 22 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level005" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 328.0
+margin_right = 1445.0
+margin_bottom = 968.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 30 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level006" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 328.0
+margin_right = 1813.0
+margin_bottom = 968.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 29 )
 icon_align = 1
 expand_icon = true
 
 [node name="Level007" type="Button" parent="Control"]
 margin_left = 64.0
-margin_top = 1216.0
-margin_right = 1424.0
-margin_bottom = 2229.0
+margin_top = 576.0
+margin_right = 1077.0
+margin_bottom = 1216.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 23 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level008" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 576.0
+margin_right = 1445.0
+margin_bottom = 1216.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 25 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level009" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 576.0
+margin_right = 1813.0
+margin_bottom = 1216.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 21 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level010" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 840.0
+margin_right = 1077.0
+margin_bottom = 1480.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 24 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level011" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 840.0
+margin_right = 1445.0
+margin_bottom = 1480.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 31 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level012" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 840.0
+margin_right = 1813.0
+margin_bottom = 1480.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 18 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level013" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 1088.0
+margin_right = 1077.0
+margin_bottom = 1728.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 26 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level014" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 1088.0
+margin_right = 1445.0
+margin_bottom = 1728.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 27 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level015" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 1088.0
+margin_right = 1813.0
+margin_bottom = 1728.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 28 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level016" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 1344.0
+margin_right = 1077.0
+margin_bottom = 1984.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 19 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level017" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 1344.0
+margin_right = 1445.0
+margin_bottom = 1984.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 20 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level018" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 1344.0
+margin_right = 1813.0
+margin_bottom = 1984.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 17 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level019" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 1600.0
+margin_right = 1077.0
+margin_bottom = 2240.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 9 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level020" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 1600.0
+margin_right = 1445.0
+margin_bottom = 2240.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 10 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level021" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 1600.0
+margin_right = 1813.0
+margin_bottom = 2240.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 8 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level022" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 1856.0
+margin_right = 1077.0
+margin_bottom = 2496.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 12 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level023" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 1856.0
+margin_right = 1445.0
+margin_bottom = 2496.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 14 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level024" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 1856.0
+margin_right = 1813.0
+margin_bottom = 2496.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 11 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level025" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 2112.0
+margin_right = 1077.0
+margin_bottom = 2752.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 13 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level026" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 2112.0
+margin_right = 1445.0
+margin_bottom = 2752.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 15 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level027" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 2112.0
+margin_right = 1813.0
+margin_bottom = 2752.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 16 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level028" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 2368.0
+margin_right = 1077.0
+margin_bottom = 3008.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 4 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level029" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 2368.0
+margin_right = 1445.0
+margin_bottom = 3008.0
 rect_scale = Vector2( 0.3, 0.3 )
 icon = ExtResource( 7 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level030" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 2368.0
+margin_right = 1813.0
+margin_bottom = 3008.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 5 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level031" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 2624.0
+margin_right = 1077.0
+margin_bottom = 3264.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 32 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level032" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 2624.0
+margin_right = 1445.0
+margin_bottom = 3264.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 33 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level033" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 2624.0
+margin_right = 1813.0
+margin_bottom = 3264.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 34 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level034" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 2896.0
+margin_right = 1077.0
+margin_bottom = 3536.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 35 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level035" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 2896.0
+margin_right = 1445.0
+margin_bottom = 3536.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 47 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level036" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 2896.0
+margin_right = 1813.0
+margin_bottom = 3536.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 40 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level037" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 3144.0
+margin_right = 1077.0
+margin_bottom = 3784.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 56 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level038" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 3144.0
+margin_right = 1445.0
+margin_bottom = 3784.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 57 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level039" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 3144.0
+margin_right = 1813.0
+margin_bottom = 3784.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 53 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level040" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 3408.0
+margin_right = 1077.0
+margin_bottom = 4048.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 49 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level041" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 3408.0
+margin_right = 1445.0
+margin_bottom = 4048.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 55 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level042" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 3408.0
+margin_right = 1813.0
+margin_bottom = 4048.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 41 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level043" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 3656.0
+margin_right = 1077.0
+margin_bottom = 4296.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 42 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level044" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 3656.0
+margin_right = 1445.0
+margin_bottom = 4296.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 52 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level045" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 3656.0
+margin_right = 1813.0
+margin_bottom = 4296.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 60 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level046" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 3912.0
+margin_right = 1077.0
+margin_bottom = 4552.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 58 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level047" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 3912.0
+margin_right = 1445.0
+margin_bottom = 4552.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 46 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level048" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 3912.0
+margin_right = 1813.0
+margin_bottom = 4552.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 61 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level049" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 4168.0
+margin_right = 1077.0
+margin_bottom = 4808.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 44 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level050" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 4168.0
+margin_right = 1445.0
+margin_bottom = 4808.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 50 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level051" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 4168.0
+margin_right = 1813.0
+margin_bottom = 4808.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 48 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level052" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 4424.0
+margin_right = 1077.0
+margin_bottom = 5064.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 51 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level053" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 4424.0
+margin_right = 1445.0
+margin_bottom = 5064.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 43 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level054" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 4424.0
+margin_right = 1813.0
+margin_bottom = 5064.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 59 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level055" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 4680.0
+margin_right = 1077.0
+margin_bottom = 5320.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 37 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level056" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 4680.0
+margin_right = 1445.0
+margin_bottom = 5320.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 36 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level057" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 4680.0
+margin_right = 1813.0
+margin_bottom = 5320.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 38 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level058" type="Button" parent="Control"]
+margin_left = 64.0
+margin_top = 4936.0
+margin_right = 1077.0
+margin_bottom = 5576.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 39 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level059" type="Button" parent="Control"]
+margin_left = 432.0
+margin_top = 4936.0
+margin_right = 1445.0
+margin_bottom = 5576.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 45 )
+icon_align = 1
+expand_icon = true
+
+[node name="Level060" type="Button" parent="Control"]
+margin_left = 800.0
+margin_top = 4936.0
+margin_right = 1813.0
+margin_bottom = 5576.0
+rect_scale = Vector2( 0.3, 0.3 )
+icon = ExtResource( 54 )
 icon_align = 1
 expand_icon = true
