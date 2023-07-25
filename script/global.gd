@@ -23,7 +23,7 @@ func get_level_list():
 	var file_list = {}
 	var dir = Directory.new()
 	if dir.open("res://level/") == OK:
-		dir.list_dir_begin()
+		dir.list_dir_begin(true)
 		var filename = dir.get_next()
 		var i = 0
 		while filename != "":
@@ -33,4 +33,5 @@ func get_level_list():
 			file_list[i] = "res://level/"+filename
 			filename = dir.get_next()
 			i += 1
+		dir.list_dir_end()
 	return file_list
