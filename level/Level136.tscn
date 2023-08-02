@@ -47,6 +47,3 @@ position = Vector2( 448, 384 )
 
 [node name="box5" parent="." instance=ExtResource( 1 )]
 position = Vector2( 448, 448 )
-
-[node name="box6" parent="." instance=ExtResource( 1 )]
-position = Vector2( 448, 512 )
