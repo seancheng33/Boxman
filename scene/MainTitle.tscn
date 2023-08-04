@@ -46,27 +46,27 @@ flat = true
 
 [node name="change" type="Button" parent="."]
 margin_left = 568.0
-margin_top = 555.0
+margin_top = 552.0
 margin_right = 712.0
-margin_bottom = 585.0
+margin_bottom = 582.0
 custom_fonts/font = SubResource( 2 )
 text = "游 戏 选 关"
 flat = true
 
 [node name="about" type="Button" parent="."]
-margin_left = 585.0
-margin_top = 599.0
-margin_right = 693.0
-margin_bottom = 629.0
+margin_left = 584.0
+margin_top = 592.0
+margin_right = 692.0
+margin_bottom = 622.0
 custom_fonts/font = SubResource( 2 )
 text = "关    于"
 flat = true
 
 [node name="exit" type="Button" parent="."]
 margin_left = 568.0
-margin_top = 640.0
+margin_top = 632.0
 margin_right = 712.0
-margin_bottom = 670.0
+margin_bottom = 662.0
 custom_fonts/font = SubResource( 2 )
 text = "退 出 游 戏"
 flat = true
