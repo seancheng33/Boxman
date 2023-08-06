@@ -27,7 +27,8 @@
 
 
 ## 打包下载
-游戏的docker镜像和win版的二进制可执行文件和html5版本已经打包完成，放在百度盘供有兴趣的朋友下载，windows版和HTML5版本，也可以在源码的dist目录中直接下载zip包。docker镜像因为文件太大，没有上传上来。则需要移步到百度盘下载。
+游戏的docker镜像和win版的二进制可执行文件和html5版本已经打包完成，放在百度盘供有兴趣的朋友下载，windows版和HTML5版本，也可以在源码的dist目录中直接下载zip包。
+右侧的releases下载亦可。
 
 docker镜像：
 
