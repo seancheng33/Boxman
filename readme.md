@@ -18,13 +18,13 @@
 游戏的大致界面：
 
 ### 主界面
-![主界面](assets\img\主界面.png "主界面")
+![主界面](./assets/img/主界面.png "主界面")
 
 ### 游戏关卡
-![游戏关卡](assets\level_image\level039.png "游戏关卡")
+![游戏关卡](assets/level_image/level039.png "游戏关卡")
 
 ### 游戏选关
-![游戏选关](assets\img\游戏选关.png "游戏选关")
+![游戏选关](assets/img/游戏选关.png "游戏选关")
 
 
 ## 游戏操作介绍：
