@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Boxman.512x512.png-4fef26bd48a71513bd6919241aae1b0d.stex"
+path="res://.import/Boxman.512x512.png-486bb554a1ec400e382fdea5b2bbeaaf.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://boxman/Boxman.512x512.png"
-dest_files=[ "res://.import/Boxman.512x512.png-4fef26bd48a71513bd6919241aae1b0d.stex" ]
+source_file="res://dist/boxman/Boxman.512x512.png"
+dest_files=[ "res://.import/Boxman.512x512.png-486bb554a1ec400e382fdea5b2bbeaaf.stex" ]
 
 [params]
 

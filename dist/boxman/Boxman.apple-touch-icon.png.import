@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Boxman.apple-touch-icon.png-5eafa5bc7976994fc50f91acf0ead0f3.stex"
+path="res://.import/Boxman.apple-touch-icon.png-e82ff8bc9b70918fb2101dd0d964d029.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://boxman/Boxman.apple-touch-icon.png"
-dest_files=[ "res://.import/Boxman.apple-touch-icon.png-5eafa5bc7976994fc50f91acf0ead0f3.stex" ]
+source_file="res://dist/boxman/Boxman.apple-touch-icon.png"
+dest_files=[ "res://.import/Boxman.apple-touch-icon.png-e82ff8bc9b70918fb2101dd0d964d029.stex" ]
 
 [params]
 

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Boxman.180x180.png-40d1d85410700deb25bc5e2f1e1699a4.stex"
+path="res://.import/游戏选关.png-55625a6f5d56ebfc2b04f1d4e73dcb29.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://dist/boxman/Boxman.180x180.png"
-dest_files=[ "res://.import/Boxman.180x180.png-40d1d85410700deb25bc5e2f1e1699a4.stex" ]
+source_file="res://assets/img/游戏选关.png"
+dest_files=[ "res://.import/游戏选关.png-55625a6f5d56ebfc2b04f1d4e73dcb29.stex" ]
 
 [params]
 
