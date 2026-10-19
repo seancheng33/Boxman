@@ -6,6 +6,9 @@ func _ready():
 	
 
 func bt_press(level_name):
-	var path = "res://level/" + level_name + ".tscn"
-	if ResourceLoader.exists(path):
-		get_tree().change_scene(path)
+	# 按钮名形如 "Level101"，转 0 基索引后走统一导航（模板场景从 levels_txt/ 生成）
+	if not level_name.begins_with("Level") or level_name.length() <= 5:
+		return
+	var index := int(level_name.substr(5)) - 1
+	if index >= 0:
+		GlobalVar.goto_level(index)

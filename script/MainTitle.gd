@@ -2,7 +2,7 @@ extends Node2D
 	
 	
 func _on_new_pressed():
-	get_tree().change_scene("res://level/Level001.tscn")
+	GlobalVar.goto_level(0)
 
 func _on_change_pressed():
 	get_tree().change_scene("res://scene/choice.tscn")
