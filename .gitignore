@@ -5,3 +5,5 @@ dist/*
 # 系统垃圾文件
 .DS_Store
 Thumbs.db
+run_test.log
+shot_*.png
