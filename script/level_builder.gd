@@ -29,22 +29,27 @@ func _build_level():
 		push_error("关卡数据为空: " + list[index])
 		return
 
+	# 分关配色：按关卡索引取主题（每 20 关一个章节轮换 5 套颜色）
+	var theme: Dictionary = GlobalVar.get_theme_for_level(index)
+
 	# 墙：TileMap 放在原点，格子坐标即真实网格坐标，世界位置与旧版逐格一致
 	var tilemap = TILEMAP_SCENE.instance()
 	tilemap.position = Vector2.ZERO
 	add_child(tilemap)
 	for cell in data.walls:
-		tilemap.set_cellv(cell, 0)
+		tilemap.set_cellv(cell, theme.wall)
 
 	# 目标 → 箱子 → 玩家（后添加的绘制在上层，与旧版层级一致）
 	for cell in data.dests:
 		var d = DEST_SCENE.instance()
 		d.position = cell * TILE
 		add_child(d)
+		d.apply_theme(theme.dest)
 	for cell in data.boxes:
 		var b = BOX_SCENE.instance()
 		b.position = cell * TILE
 		add_child(b)
+		b.apply_theme(theme.box, theme.box_dark)
 	var p = PLAY_SCENE.instance()
 	p.position = data.player * TILE
 	add_child(p)

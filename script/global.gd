@@ -87,6 +87,23 @@ func set_lang(value: String) -> void:
 func toggle_lang() -> void:
 	set_lang("en" if lang == "zh" else "zh")
 
+# ---------- 分关配色主题 ----------
+# 每 20 关一个章节，章节依序轮换 5 套主题，避免视觉疲劳。
+# 素材来自 tilesheet.png：
+#   箱子正常版 y=0 行、同色暗版 y=64 行（压在目标点上时切换）、目标点括号标记 y=192 行
+const THEME_CHAPTER_SIZE = 20
+const BOX_THEMES = [
+	{"name": "brown", "wall": 0, "box": Rect2(64, 0, 64, 64),  "box_dark": Rect2(64, 64, 64, 64),  "dest": Rect2(64, 192, 64, 64)},
+	{"name": "red",   "wall": 1, "box": Rect2(128, 0, 64, 64), "box_dark": Rect2(128, 64, 64, 64), "dest": Rect2(128, 192, 64, 64)},
+	{"name": "blue",  "wall": 2, "box": Rect2(192, 0, 64, 64), "box_dark": Rect2(192, 64, 64, 64), "dest": Rect2(192, 192, 64, 64)},
+	{"name": "green", "wall": 3, "box": Rect2(256, 0, 64, 64), "box_dark": Rect2(256, 64, 64, 64), "dest": Rect2(256, 192, 64, 64)},
+	{"name": "gray",  "wall": 4, "box": Rect2(320, 0, 64, 64), "box_dark": Rect2(320, 64, 64, 64), "dest": Rect2(320, 192, 64, 64)},
+]
+
+func get_theme_for_level(index: int) -> Dictionary:
+	var chapter: int = int(index / float(THEME_CHAPTER_SIZE))
+	return BOX_THEMES[chapter % BOX_THEMES.size()]
+
 # ---------- 方向与关卡 ----------
 
 var directions = {
