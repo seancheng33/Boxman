@@ -185,8 +185,11 @@ def solve_level(name):
 
 
 def main():
-    names = sorted(f for f in os.listdir(LEVEL_DIR)
-                   if f.startswith("Level") and f.endswith(".txt"))
+    # 可选命令行参数：只验证指定的关卡文件（如 python3 solve_levels.py Level006.txt ...）
+    requested = [a if a.endswith(".txt") else a + ".txt" for a in sys.argv[1:]]
+    all_names = sorted(f for f in os.listdir(LEVEL_DIR)
+                       if f.startswith("Level") and f.endswith(".txt"))
+    names = [n for n in all_names if not requested or n in requested]
     print("待验证关卡: %d" % len(names))
     t0 = time.time()
     workers = min(6, cpu_count() or 1)
