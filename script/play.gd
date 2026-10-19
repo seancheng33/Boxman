@@ -18,7 +18,8 @@ func _save_state():
 		history.pop_front()
 
 func _get_boxes_positions() -> PoolVector2Array:
-	var boxes = get_tree().root.get_nodes_in_group("boxes")
+	# 注意：get_nodes_in_group 是 SceneTree 的方法；get_tree().root 是 Viewport，没有它
+	var boxes = get_tree().get_nodes_in_group("box")
 	var positions = PoolVector2Array()
 	for box in boxes:
 		positions.append(box.global_position)
@@ -40,7 +41,7 @@ func undo():
 	var state: GameState = history.back()
 	$AnimationPlayer.stop()
 	global_position = state.player_position
-	var boxes = get_tree().root.get_nodes_in_group("boxes")
+	var boxes = get_tree().get_nodes_in_group("box")
 	for i in boxes.size():
 		boxes[i].global_position = state.boxes_positions[i]
 
