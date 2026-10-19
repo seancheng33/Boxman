@@ -7,3 +7,6 @@ dist/*
 Thumbs.db
 run_test.log
 shot_*.png
+
+# 本地验证产物
+build/
