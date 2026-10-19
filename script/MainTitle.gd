@@ -10,6 +10,7 @@ func refresh_texts():
 	$about.text = GlobalVar.t("title.about")
 	$exit.text = GlobalVar.t("title.exit")
 	$lang.text = GlobalVar.t("lang.button")
+	$Subtitle.text = GlobalVar.t("title.subtitle")
 
 func _on_new_pressed():
 	GlobalVar.goto_level(0)

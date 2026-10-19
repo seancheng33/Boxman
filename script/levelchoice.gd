@@ -20,6 +20,7 @@ var selected_index := -1
 var preview_viewport: Viewport
 var preview_level: Node
 var btn_font: DynamicFont
+var _buttons := {}
 
 func _ready():
 	btn_font = DynamicFont.new()
@@ -35,8 +36,14 @@ func _ready():
 	preview_viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
 	add_child(preview_viewport)
 	preview_rect.texture = preview_viewport.get_texture()
+	# Godot 3 的 Viewport 纹理 Y 轴与屏幕坐标系相反，直接上 TextureRect 会上下颠倒
+	preview_rect.flip_v = true
 
-	_show_page(0)
+	# 还原游戏状态：优先定位上次游玩的关卡，否则停在本页第一个已解锁关
+	var anchor := GlobalVar.last_level_index
+	if anchor < 0 or not GlobalVar.is_level_unlocked(anchor) or anchor >= _level_count():
+		anchor = 0
+	_show_page(int(anchor / float(PAGE_SIZE)), anchor)
 
 func _level_count() -> int:
 	return GlobalVar.get_level_list().size()
@@ -44,7 +51,7 @@ func _level_count() -> int:
 func _page_count() -> int:
 	return int(ceil(_level_count() / float(PAGE_SIZE)))
 
-func _show_page(p: int):
+func _show_page(p: int, select_hint: int = -1):
 	page = clamp(p, 0, _page_count() - 1)
 	page_label.text = GlobalVar.t("select.page") % [page + 1, _page_count()]
 	for c in grid.get_children():
@@ -52,6 +59,7 @@ func _show_page(p: int):
 	var start: int = page * PAGE_SIZE
 	var end: int = min(start + PAGE_SIZE, _level_count())
 	var first_unlocked := -1
+	_buttons.clear()
 	for i in range(start, end):
 		var btn := Button.new()
 		btn.text = str(i + 1)
@@ -60,11 +68,19 @@ func _show_page(p: int):
 		var unlocked: bool = GlobalVar.is_level_unlocked(i)
 		btn.disabled = not unlocked
 		btn.self_modulate = Color(1, 1, 1, 1) if unlocked else Color(0.35, 0.35, 0.35, 0.85)
+		if unlocked and GlobalVar.is_level_cleared(i):
+			# 已通关的关卡数字标绿，一眼看出进度
+			btn.add_color_override("font_color", Color(0.13, 0.55, 0.13))
 		btn.connect("pressed", self, "_on_level_pressed", [i])
 		grid.add_child(btn)
+		_buttons[i] = btn
 		if first_unlocked < 0 and unlocked:
 			first_unlocked = i
-	_select(first_unlocked)
+	# select_hint：外部指定的预选关（上次游玩的关）；无效则选本页第一个已解锁关
+	if select_hint >= start and select_hint < end and GlobalVar.is_level_unlocked(select_hint):
+		_select(select_hint)
+	else:
+		_select(first_unlocked)
 
 func _on_prev_page_pressed():
 	_show_page(page - 1)
@@ -82,7 +98,16 @@ func _on_enter_pressed():
 		GlobalVar.goto_level(selected_index)
 
 func _select(index: int):
+	# 选中态高亮：恢复旧选中按钮颜色，再把新选中的数字标橙
+	if _buttons.has(selected_index) and is_instance_valid(_buttons[selected_index]):
+		var old: Button = _buttons[selected_index]
+		if GlobalVar.is_level_cleared(selected_index):
+			old.add_color_override("font_color", Color(0.13, 0.55, 0.13))
+		else:
+			old.remove_color_override("font_color")
 	selected_index = index
+	if _buttons.has(index) and is_instance_valid(_buttons[index]):
+		_buttons[index].add_color_override("font_color", Color(0.85, 0.35, 0.0))
 	_refresh_preview()
 
 func _refresh_preview():

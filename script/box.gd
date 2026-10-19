@@ -13,7 +13,20 @@ func apply_theme(box_rect: Rect2, box_on_dest_rect: Rect2) -> void:
 	_rect_on_dest = box_on_dest_rect
 	sprite.region_rect = _rect_on_dest if on_dest else _rect_normal
 
-# 由 dest.gd 在箱子进入/离开目标点时调用，切换同色暗版图形
+# dest.gd 在箱子进入/离开目标点时调用；同一帧多个事件合并为一次延后重查
+func notify_dest_changed() -> void:
+	call_deferred("_update_dest_state")
+
+# 按自身位置重算是否压在任意目标点上（与事件触发顺序无关）
+func _update_dest_state() -> void:
+	var on := false
+	for d in get_tree().get_nodes_in_group("dest"):
+		if is_instance_valid(d) and d.global_position == global_position:
+			on = true
+			break
+	set_on_dest(on)
+
+# 切换同色暗版图形（压在目标点上时为暗版）
 func set_on_dest(value: bool) -> void:
 	if on_dest == value:
 		return
