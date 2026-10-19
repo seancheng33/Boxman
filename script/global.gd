@@ -5,12 +5,17 @@ extends Node
 const LANG_CFG_PATH = "user://settings.cfg"
 var lang: String = "zh"
 
-# ---------- 关卡解锁进度（游戏状态，持久化在 user://progress.cfg） ----------
+# ---------- 关卡解锁进度（游戏状态，持久化在 progress.cfg） ----------
+# 桌面发行版存档放在游戏执行文件同级目录（便携化，随文件夹移动不丢进度）；
+# HTML5 端受浏览器沙箱限制仍走 user://（IndexedDB），编辑器开发环境同理。
 # 默认解锁前 5 关（0 基索引 < unlocked_count 即可选），通关第 N 关自动解锁第 N+1 关；
 # 同时记录已通关关卡集合与上次游玩的关卡，选关界面据此还原游戏状态。
 const PROGRESS_CFG_PATH = "user://progress.cfg"
 const DEFAULT_UNLOCKED = 5
 var unlocked_count: int = DEFAULT_UNLOCKED
+# 实际使用的存档路径（_resolve_storage_paths 按运行环境决定）
+var _lang_cfg_path: String = LANG_CFG_PATH
+var _progress_cfg_path: String = PROGRESS_CFG_PATH
 # 已通关关卡索引集合（0 基）
 var cleared_levels: Dictionary = {}
 # 上次游玩的关卡索引（-1 表示尚无记录），选关界面打开时定位到该关所在页
@@ -66,20 +71,36 @@ const TEXTS = {
 }
 
 func _ready():
-	# autoload 早于一切场景 _ready，先恢复语言设置
+	# autoload 早于一切场景 _ready，先决定存档路径，再恢复语言设置
+	_resolve_storage_paths()
 	var cfg = ConfigFile.new()
-	if cfg.load(LANG_CFG_PATH) == OK:
+	if cfg.load(_lang_cfg_path) == OK:
 		lang = cfg.get_value("ui", "lang", "zh")
 		if not TEXTS.has(lang):
 			lang = "zh"
 	# 恢复游戏状态（首次运行为默认值）
 	var progress = ConfigFile.new()
-	if progress.load(PROGRESS_CFG_PATH) == OK:
+	if progress.load(_progress_cfg_path) == OK:
 		unlocked_count = max(DEFAULT_UNLOCKED, int(progress.get_value("progress", "unlocked", DEFAULT_UNLOCKED)))
 		last_level_index = int(progress.get_value("progress", "last_level", -1))
 		cleared_levels.clear()
 		for v in progress.get_value("progress", "cleared", []):
 			cleared_levels[int(v)] = true
+
+# 桌面发行版把存档放在 exe 同级目录；目录不可写（如 Program Files）则回退 user://。
+# HTML5 端浏览器沙箱与编辑器开发环境不走此分支。
+func _resolve_storage_paths() -> void:
+	if OS.get_name() == "HTML5" or OS.has_feature("editor"):
+		return
+	var exe_dir: String = OS.get_executable_path().get_base_dir()
+	var probe_path: String = exe_dir.plus_file(".boxman_probe.tmp")
+	var probe := File.new()
+	if probe.open(probe_path, File.WRITE) != OK:
+		return
+	probe.close()
+	Directory.new().remove(probe_path)
+	_lang_cfg_path = exe_dir.plus_file("settings.cfg")
+	_progress_cfg_path = exe_dir.plus_file("progress.cfg")
 
 func _save_progress() -> void:
 	var cfg = ConfigFile.new()
@@ -89,7 +110,7 @@ func _save_progress() -> void:
 	for k in cleared_levels:
 		cleared.append(int(k))
 	cfg.set_value("progress", "cleared", cleared)
-	cfg.save(PROGRESS_CFG_PATH)
+	cfg.save(_progress_cfg_path)
 
 func is_level_unlocked(index: int) -> bool:
 	return index < unlocked_count
@@ -115,7 +136,7 @@ func set_lang(value: String) -> void:
 	lang = value
 	var cfg = ConfigFile.new()
 	cfg.set_value("ui", "lang", lang)
-	cfg.save(LANG_CFG_PATH)
+	cfg.save(_lang_cfg_path)
 
 func toggle_lang() -> void:
 	set_lang("en" if lang == "zh" else "zh")

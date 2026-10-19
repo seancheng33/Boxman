@@ -7,8 +7,9 @@ extends SceneTree
 func _initialize():
 	var g = root.get_node("/root/GlobalVar")
 	var f = File.new()
-	var has_save: bool = f.file_exists(g.PROGRESS_CFG_PATH)
+	var has_save: bool = f.file_exists(g._progress_cfg_path)
 	print("SAVE_EXISTS=", has_save, " (expect false for fresh install)")
+	print("PROGRESS_PATH=", g._progress_cfg_path)
 	print("DEFAULT unlocked_count=", g.unlocked_count, " (expect 5)")
 	var ok: bool = not has_save and g.unlocked_count == g.DEFAULT_UNLOCKED
 	for i in range(6):

@@ -67,7 +67,7 @@ custom_constants/separation = 24
 margin_right = 792.0
 margin_bottom = 568.0
 size_flags_horizontal = 3
-columns = 10
+columns = 5
 custom_constants/h_separation = 10
 custom_constants/v_separation = 10
 

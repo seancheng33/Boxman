@@ -6,9 +6,15 @@ extends Panel
 const LEVEL_SCENE := preload("res://scene/LevelTemplate.tscn")
 const FONT_DATA := preload("res://assets/fonts/Unifont.ttf")
 
-const PAGE_SIZE := 60
-const GRID_COLUMNS := 10
+const PAGE_SIZE := 25
+const GRID_COLUMNS := 5
+# 按钮尺寸放大一倍（原 72x52），字号同步翻倍保持视觉比例
+const BTN_SIZE := Vector2(144, 104)
+const BTN_FONT_SIZE := 44
+const LOCK_ICON_SIZE := 44
+const LOCK_ICON_MARGIN := 8
 const TILE := 64
+const LOCK_RED := Color(0.85, 0.11, 0.11)
 
 onready var grid: GridContainer = $VBox/Content/Grid
 onready var page_label: Label = $VBox/PageBar/page_label
@@ -20,12 +26,15 @@ var selected_index := -1
 var preview_viewport: Viewport
 var preview_level: Node
 var btn_font: DynamicFont
+var lock_texture: ImageTexture
 var _buttons := {}
 
 func _ready():
 	btn_font = DynamicFont.new()
 	btn_font.font_data = FONT_DATA
-	btn_font.size = 22
+	btn_font.size = BTN_FONT_SIZE
+	lock_texture = _make_lock_texture()
+	grid.columns = GRID_COLUMNS
 	$VBox/PageBar/prev_page.text = GlobalVar.t("page.prev")
 	$VBox/PageBar/next_page.text = GlobalVar.t("page.next")
 	enter_button.text = GlobalVar.t("select.enter")
@@ -63,7 +72,7 @@ func _show_page(p: int, select_hint: int = -1):
 	for i in range(start, end):
 		var btn := Button.new()
 		btn.text = str(i + 1)
-		btn.rect_min_size = Vector2(72, 52)
+		btn.rect_min_size = BTN_SIZE
 		btn.add_font_override("font", btn_font)
 		var unlocked: bool = GlobalVar.is_level_unlocked(i)
 		btn.disabled = not unlocked
@@ -71,6 +80,9 @@ func _show_page(p: int, select_hint: int = -1):
 		if unlocked and GlobalVar.is_level_cleared(i):
 			# 已通关的关卡数字标绿，一眼看出进度
 			btn.add_color_override("font_color", Color(0.13, 0.55, 0.13))
+		elif not unlocked:
+			# 未解锁：右上角加红锁（子节点不受按钮 self_modulate 影响，保持亮红）
+			_add_lock_icon(btn)
 		btn.connect("pressed", self, "_on_level_pressed", [i])
 		grid.add_child(btn)
 		_buttons[i] = btn
@@ -84,6 +96,54 @@ func _show_page(p: int, select_hint: int = -1):
 
 func _on_prev_page_pressed():
 	_show_page(page - 1)
+
+# 程序化生成红锁图标（44x44：上半圆锁环 + 锁体 + 亮色钥匙孔），不依赖外部素材
+func _make_lock_texture() -> ImageTexture:
+	var s := LOCK_ICON_SIZE
+	var img := Image.new()
+	img.create(s, s, false, Image.FORMAT_RGBA8)
+	img.lock()
+	var body_left := 8
+	var body_right := 35
+	var body_top := 19
+	var body_bottom := 39
+	var cx := 22.0
+	var ring_cy := 16.0
+	var ring_r := 9.0
+	var ring_t := 4.0
+	for y in range(s):
+		for x in range(s):
+			var dx := x + 0.5 - cx
+			var dy := y + 0.5 - ring_cy
+			var d := sqrt(dx * dx + dy * dy)
+			# 锁环：上半圆环，腿延伸到锁体顶部衔接
+			var in_ring: bool = abs(d - ring_r) <= ring_t and dy <= 4.0
+			var in_body: bool = x >= body_left and x <= body_right and y >= body_top and y <= body_bottom
+			if in_ring or in_body:
+				img.set_pixel(x, y, LOCK_RED)
+	# 钥匙孔：亮色镂空（圆 + 短柄）
+	var key := Color(1.0, 0.9, 0.82)
+	for y in range(s):
+		for x in range(s):
+			var dx := x + 0.5 - cx
+			var dy1 := y + 0.5 - 28.0
+			if dx * dx + dy1 * dy1 <= 16.0 or (abs(dx) <= 1.5 and y >= 30 and y <= 35):
+				if x >= body_left and x <= body_right and y >= body_top and y <= body_bottom:
+					img.set_pixel(x, y, key)
+	img.unlock()
+	var tex := ImageTexture.new()
+	tex.create_from_image(img)
+	return tex
+
+func _add_lock_icon(btn: Button) -> void:
+	var lock := TextureRect.new()
+	lock.texture = lock_texture
+	lock.expand = true
+	lock.stretch_mode = TextureRect.STRETCH_SCALE
+	lock.rect_size = Vector2(LOCK_ICON_SIZE, LOCK_ICON_SIZE)
+	lock.rect_position = Vector2(BTN_SIZE.x - LOCK_ICON_SIZE - LOCK_ICON_MARGIN, LOCK_ICON_MARGIN)
+	lock.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	btn.add_child(lock)
 
 func _on_next_page_pressed():
 	_show_page(page + 1)

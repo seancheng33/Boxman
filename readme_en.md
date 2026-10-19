@@ -46,9 +46,9 @@ Open the play URL directly: <http://three-corner.xyz/static/boxman/Boxman.html>
 - Engine: Godot 3.5.2 (GDScript)
 - Dev environment: Windows 11 (primary), macOS (occasionally)
 - **Level data**: standard sokoban ASCII text under `levels_txt/` (`#` wall, `@` player, `$` box, `.` goal, `*`/`+` box/player on goal). Levels are generated at runtime by `scene/LevelTemplate.tscn` + `script/level_builder.gd` — **adding a level is just dropping a text file into `levels_txt/`**, no editor work needed.
-- **Game state**: unlock progress, cleared levels and the last played level are persisted to `user://progress.cfg` (IndexedDB on HTML5)
+- **Game state**: unlock progress, cleared levels and the last played level are persisted to `progress.cfg`; **on Windows / macOS it lives next to the game executable** (portable save — copy the whole folder to carry your progress; falls back to the system `user://` if the folder is not writable), IndexedDB on HTML5
 - **Navigation**: all screens go through the unified `goto_level(index)` entry in `global.gd`
-- **Localization**: all UI strings live in the `TEXTS` table in `global.gd`; the language preference is persisted to `user://settings.cfg`
+- **Localization**: all UI strings live in the `TEXTS` table in `global.gd`; the language preference is persisted next to `progress.cfg` (portable location on desktop, `user://settings.cfg` on HTML5/editor)
 - **Level select**: paged number grid + SubViewport live preview of the selected level (always in sync with the real level, inherits the color theme); no pre-rendered screenshots involved
 - Export: `export_presets.cfg` includes `include_filter="*.txt"` so exported builds carry the level data
 
@@ -70,6 +70,11 @@ Windows and HTML5 builds are available on the **Releases** page (the HTML5 build
 More levels and content are coming. Found a bug or have a suggestion? Email me at aya234@163.com
 
 ## Changelog
+
+### v1.2.1
+
+- **Portable save**: on Windows / macOS progress is stored next to the game executable (`progress.cfg`) — copy the folder to carry your progress; automatic fallback to the system directory when not writable, HTML5 unchanged
+- **Level select**: level buttons doubled in size (144x104), 5x5 = 25 per page; locked levels show a red padlock icon
 
 ### v1.2.0
 

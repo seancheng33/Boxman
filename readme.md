@@ -46,7 +46,7 @@
 - 引擎：Godot 3.5.2（GDScript）
 - 开发环境：Win11（主要）、macOS（偶尔）
 - **关卡数据**：`levels_txt/` 下的标准 sokoban ASCII 文本（`#` 墙 `@` 人 `$` 箱 `.` 目标，`*`/`+` 为箱/人压目标）。关卡由 `scene/LevelTemplate.tscn` + `script/level_builder.gd` 在运行时生成，**新增关卡只需往 `levels_txt/` 放一个文本文件**，零编辑器操作
-- **游戏状态**：解锁进度、通关记录、上次游玩关卡统一持久化在 `user://progress.cfg`（HTML5 端为 IndexedDB）
+- **游戏状态**：解锁进度、通关记录、上次游玩关卡统一持久化在 `progress.cfg`；**Windows / macOS 版存放在游戏程序同级目录**（便携式存档，整个文件夹拷走进度跟着走；目录不可写时自动回退系统 `user://`），HTML5 端为浏览器 IndexedDB
 - **导航**：所有界面统一走 `global.gd` 的 `goto_level(索引)` 入口
 - **多语言**：文案集中在 `global.gd` 的 `TEXTS` 表，语言偏好持久化在 `user://settings.cfg`
 - **选关界面**：分页数字网格 + SubViewport 实时渲染所选关卡（预览与实际关卡永远一致，自动继承配色主题），不再依赖关卡截图
@@ -70,6 +70,11 @@ Windows 版与 HTML5 版本可在右侧 **Releases** 页面下载（HTML5 版解
 关卡和其他的内容将逐步更新。如果您发现了 bug 或者有其他建议，欢迎发送至我的邮箱：aya234@163.com
 
 ## 最近更新
+
+### v1.2.1
+
+- **便携化存档**：Windows / macOS 版进度存放在游戏执行文件同级目录（`progress.cfg`），整个游戏文件夹拷贝即可带走进度；目录不可写自动回退系统目录，HTML5 端不变
+- **选关界面**：关卡按钮放大一倍（144x104），每页 5x5=25 关；未解锁关卡右上角显示红色锁图标
 
 ### v1.2.0
 
