@@ -11,8 +11,11 @@ func _initialize():
 	root.add_child(timer)
 	timer.connect("timeout", self, "_capture")
 	timer.start()
-	# 关卡索引由 level_builder._apply_env_override 从 BOXMAN_LEVEL 读取
-	change_scene("res://scene/LevelTemplate.tscn")
+	# SCENE_PATH 可指定任意场景（如选关界面）；默认截关卡模板（索引由 BOXMAN_LEVEL 控制）
+	var scene_path := OS.get_environment("SCENE_PATH")
+	if scene_path == "":
+		scene_path = "res://scene/LevelTemplate.tscn"
+	change_scene(scene_path)
 
 func _capture():
 	var img := root.get_viewport().get_texture().get_data()

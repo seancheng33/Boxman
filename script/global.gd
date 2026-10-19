@@ -29,6 +29,10 @@ const TEXTS = {
 		"about.text": "游戏介绍：\n\t使用键盘的方向键或者【A、S、D、W】字母键控制角色上下左右移动。\n\t推动箱子到目的位置，游戏完成后可选下一关或者返回主菜单界面，也可以在游戏中通过上一关和下一关按键选择游戏的关卡。\n\t游戏素材下载自免费游戏素材网站：https://kenney.nl/\n\t游戏关卡来自：http://sokoban.cn/ 中的经典关卡，去重后共237关。\n\t关卡和其他的内容将逐步更新。您如果有发现bug或者其他建议，欢迎将建议发送至我的邮箱，aya234@163.com\n\t一个人独立游戏制作不容易，如果您有心，可以捐赠支持一下。",
 		"about.back": "返 回",
 		"lang.button": "English",
+		"page.prev": "上一页",
+		"page.next": "下一页",
+		"select.page": "第 %d 页 / 共 %d 页",
+		"select.enter": "进 入 本 关",
 	},
 	"en": {
 		"title.new": "New Game",
@@ -47,6 +51,10 @@ const TEXTS = {
 		"about.text": "About:\n\tUse the arrow keys or WASD to move the character.\n\tPush the boxes onto the target spots. After clearing a level you can go to the next one or return to the main menu; you can also switch levels with the Prev/Next buttons in game.\n\tArt assets from the free game-asset website: https://kenney.nl/\n\tClassic levels from http://sokoban.cn/, 237 levels after deduplication.\n\tMore levels and content coming soon. Found a bug or have a suggestion? Email me at aya234@163.com\n\tMaking a game all by yourself is not easy - donations are appreciated if you would like to support.",
 		"about.back": "Back",
 		"lang.button": "中文",
+		"page.prev": "Prev Page",
+		"page.next": "Next Page",
+		"select.page": "Page %d / %d",
+		"select.enter": "Play",
 	},
 }
 
