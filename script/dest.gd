@@ -1,11 +1,11 @@
 extends Area2D
 
-var isActive = false
+var is_active = false
 
 func _on_dest_body_entered(body):
 	if body.is_in_group("box"):
-		isActive = true
+		is_active = true
 
 func _on_dest_body_exited(body):
 	if body.is_in_group("box"):
-		isActive = false
+		is_active = false

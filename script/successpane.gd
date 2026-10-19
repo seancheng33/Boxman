@@ -1,16 +1,11 @@
 extends Node2D
 
-var scene_list = GlobalVar.get_level_list()
-
-var scene_index = 0
-
 func _ready():
-	var filename = get_tree().current_scene.filename
-	for value in scene_list.values():
-		if value == filename:
-			break;
-		else:
-			scene_index += 1
+	var scene_index = GlobalVar.get_current_level_index()
+	var level_count = GlobalVar.get_level_list().size()
+	if scene_index >= level_count - 1:
+		$next.disabled = true
+		$next.text = "已是最后一关！"
 
 func _on_quit_pressed():
 	get_tree().paused = false
@@ -18,7 +13,4 @@ func _on_quit_pressed():
 
 func _on_next_pressed():
 	get_tree().paused = false
-	if scene_index != scene_list.size() - 1 :
-		get_tree().change_scene(scene_list[scene_index + 1])
-	else:
-		$next.text = "已是最后一关！"
+	GlobalVar.goto_level(GlobalVar.get_current_level_index() + 1)
