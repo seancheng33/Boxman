@@ -57,5 +57,7 @@ func _process(_delta):
 	var destinations = get_tree().get_nodes_in_group("dest")
 	if GlobalVar.check_finish(destinations):
 		game_finish = true
+		# 通关即解锁下一关（持久化在 user://progress.cfg）
+		GlobalVar.unlock_up_to(GlobalVar.get_current_level_index())
 		get_tree().paused = true
 		$MainScene/successpane.visible = true

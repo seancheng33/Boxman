@@ -5,6 +5,12 @@ extends Node
 const LANG_CFG_PATH = "user://settings.cfg"
 var lang: String = "zh"
 
+# ---------- 关卡解锁进度 ----------
+# 默认解锁前 5 关（0 基索引 < unlocked_count 即可选），通关第 N 关自动解锁第 N+1 关
+const PROGRESS_CFG_PATH = "user://progress.cfg"
+const DEFAULT_UNLOCKED = 5
+var unlocked_count: int = DEFAULT_UNLOCKED
+
 const TEXTS = {
 	"zh": {
 		"title.new": "新 的 游 戏",
@@ -51,6 +57,21 @@ func _ready():
 		lang = cfg.get_value("ui", "lang", "zh")
 		if not TEXTS.has(lang):
 			lang = "zh"
+	# 恢复关卡解锁进度（首次运行为默认值）
+	var progress = ConfigFile.new()
+	if progress.load(PROGRESS_CFG_PATH) == OK:
+		unlocked_count = max(DEFAULT_UNLOCKED, int(progress.get_value("progress", "unlocked", DEFAULT_UNLOCKED)))
+
+func is_level_unlocked(index: int) -> bool:
+	return index < unlocked_count
+
+# 通关第 index 关（0 基）后调用：解锁下一关并持久化
+func unlock_up_to(index: int) -> void:
+	if index + 1 > unlocked_count:
+		unlocked_count = index + 1
+		var cfg = ConfigFile.new()
+		cfg.set_value("progress", "unlocked", unlocked_count)
+		cfg.save(PROGRESS_CFG_PATH)
 
 func t(key: String) -> String:
 	return TEXTS[lang].get(key, TEXTS["zh"].get(key, key))
