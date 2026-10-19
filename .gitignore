@@ -1,3 +1,7 @@
+# 构建产物
 dist/*
-dist/g-boxman.tar
+# Godot 3 导入缓存目录（元数据 sidecar *.import 仍需跟踪）
+.import/
+# 系统垃圾文件
 .DS_Store
+Thumbs.db
