@@ -237,7 +237,7 @@
 [ext_resource path="res://assets/level_image/Level130.png" type="Texture" id=235]
 [ext_resource path="res://assets/level_image/Level134.png" type="Texture" id=236]
 [ext_resource path="res://assets/level_image/Level127.png" type="Texture" id=237]
-[ext_resource path="res://assets/fonts/Unifont点阵黑13.0.01.ttf" type="DynamicFontData" id=238]
+[ext_resource path="res://assets/fonts/Unifont.ttf" type="DynamicFontData" id=238]
 
 [sub_resource type="DynamicFont" id=1]
 size = 160
