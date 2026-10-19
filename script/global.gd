@@ -1,5 +1,73 @@
 extends Node
 
+# ---------- 多语言 ----------
+# lang: "zh" / "en"，持久化在 user://settings.cfg
+const LANG_CFG_PATH = "user://settings.cfg"
+var lang: String = "zh"
+
+const TEXTS = {
+	"zh": {
+		"title.new": "新 的 游 戏",
+		"title.select": "游 戏 选 关",
+		"title.about": "关    于",
+		"title.exit": "退 出 游 戏",
+		"menu.prev": "上一关",
+		"menu.next": "下一关",
+		"menu.reset": "重置本关",
+		"menu.back": "返回主菜单",
+		"menu.current": "当前关卡： %s",
+		"win.msg": "恭喜完成本关，是否继续下一关？",
+		"win.quit": "返回主菜单",
+		"win.next": "进入下一关",
+		"win.last": "已是最后一关！",
+		"about.text": "游戏介绍：\n\t使用键盘的方向键或者【A、S、D、W】字母键控制角色上下左右移动。\n\t推动箱子到目的位置，游戏完成后可选下一关或者返回主菜单界面，也可以在游戏中通过上一关和下一关按键选择游戏的关卡。\n\t游戏素材下载自免费游戏素材网站：https://kenney.nl/\n\t游戏关卡来自：http://sokoban.cn/ 中的经典关卡，去重后共237关。\n\t关卡和其他的内容将逐步更新。您如果有发现bug或者其他建议，欢迎将建议发送至我的邮箱，aya234@163.com\n\t一个人独立游戏制作不容易，如果您有心，可以捐赠支持一下。",
+		"about.back": "返 回",
+		"lang.button": "English",
+	},
+	"en": {
+		"title.new": "New Game",
+		"title.select": "Select Level",
+		"title.about": "About",
+		"title.exit": "Quit",
+		"menu.prev": "Prev Level",
+		"menu.next": "Next Level",
+		"menu.reset": "Restart",
+		"menu.back": "Main Menu",
+		"menu.current": "Level: %s",
+		"win.msg": "Level complete! Continue to the next one?",
+		"win.quit": "Main Menu",
+		"win.next": "Next Level",
+		"win.last": "This is the last level!",
+		"about.text": "About:\n\tUse the arrow keys or WASD to move the character.\n\tPush the boxes onto the target spots. After clearing a level you can go to the next one or return to the main menu; you can also switch levels with the Prev/Next buttons in game.\n\tArt assets from the free game-asset website: https://kenney.nl/\n\tClassic levels from http://sokoban.cn/, 237 levels after deduplication.\n\tMore levels and content coming soon. Found a bug or have a suggestion? Email me at aya234@163.com\n\tMaking a game all by yourself is not easy - donations are appreciated if you would like to support.",
+		"about.back": "Back",
+		"lang.button": "中文",
+	},
+}
+
+func _ready():
+	# autoload 早于一切场景 _ready，先恢复语言设置
+	var cfg = ConfigFile.new()
+	if cfg.load(LANG_CFG_PATH) == OK:
+		lang = cfg.get_value("ui", "lang", "zh")
+		if not TEXTS.has(lang):
+			lang = "zh"
+
+func t(key: String) -> String:
+	return TEXTS[lang].get(key, TEXTS["zh"].get(key, key))
+
+func set_lang(value: String) -> void:
+	if not TEXTS.has(value):
+		return
+	lang = value
+	var cfg = ConfigFile.new()
+	cfg.set_value("ui", "lang", lang)
+	cfg.save(LANG_CFG_PATH)
+
+func toggle_lang() -> void:
+	set_lang("en" if lang == "zh" else "zh")
+
+# ---------- 方向与关卡 ----------
+
 var directions = {
 	"ui_up":Vector2.UP,
 	"ui_down":Vector2.DOWN,

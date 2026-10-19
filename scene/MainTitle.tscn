@@ -71,7 +71,17 @@ custom_fonts/font = SubResource( 2 )
 text = "退 出 游 戏"
 flat = true
 
+[node name="lang" type="Button" parent="."]
+margin_left = 568.0
+margin_top = 672.0
+margin_right = 712.0
+margin_bottom = 702.0
+custom_fonts/font = SubResource( 2 )
+text = "English"
+flat = true
+
 [connection signal="pressed" from="new" to="." method="_on_new_pressed"]
 [connection signal="pressed" from="change" to="." method="_on_change_pressed"]
 [connection signal="pressed" from="about" to="." method="_on_about_pressed"]
 [connection signal="pressed" from="exit" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="lang" to="." method="_on_lang_pressed"]

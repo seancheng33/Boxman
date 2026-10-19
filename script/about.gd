@@ -1,6 +1,9 @@
 extends Node2D
 
-# 游戏介绍文字直接维护在 about.tscn 的 RichTextLabel 节点中，
-# 此脚本只负责返回主菜单。
+# 介绍文字（中/英）维护在 global.gd 的 TEXTS 表中，此处按当前语言刷新。
+func _ready():
+	$RichTextLabel.text = GlobalVar.t("about.text")
+	$Button.text = GlobalVar.t("about.back")
+
 func _on_Button_pressed():
 	get_tree().change_scene("res://scene/MainTitle.tscn")

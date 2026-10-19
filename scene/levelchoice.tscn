@@ -3299,6 +3299,14 @@ icon = ExtResource( 156 )
 icon_align = 1
 expand_icon = true
 
+[node name="Label160" type="Label" parent="Control/Level160"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 1, 1, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Level 160"
+align = 1
+valign = 1
 [node name="Level161" type="Button" parent="Control"]
 margin_left = 432.0
 margin_top = 13656.0
@@ -3599,7 +3607,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 custom_colors/font_color = Color( 1, 1, 0, 1 )
 custom_fonts/font = SubResource( 1 )
-text = "Level 169"
+text = "Level 176"
 align = 1
 valign = 1
 
@@ -4625,7 +4633,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 custom_colors/font_color = Color( 1, 1, 0, 1 )
 custom_fonts/font = SubResource( 1 )
-text = "Level 210"
+text = "Level 230"
 align = 1
 valign = 1
 
@@ -4762,11 +4770,3 @@ text = "Level 237"
 align = 1
 valign = 1
 
-[node name="Control@Level1560@Label160" type="Label" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-custom_colors/font_color = Color( 1, 1, 0, 1 )
-custom_fonts/font = SubResource( 1 )
-text = "Level 160"
-align = 1
-valign = 1
