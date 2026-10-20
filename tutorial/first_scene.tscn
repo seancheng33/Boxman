@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://b3kvs84hnuhlo"]
+[gd_scene load_steps=2 format=3 uid="uid://b3kvs84hnuhlo"]
+
+[ext_resource type="Script" path="res://label.gd" id="1_xxxxx"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -6,3 +8,4 @@
 offset_right = 40.0
 offset_bottom = 23.0
 text = "Hello, Godot!"
+script = ExtResource("1_xxxxx")
