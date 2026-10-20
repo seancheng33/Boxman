@@ -206,6 +206,10 @@ func _on_next() -> void:
 		_show_preview(selected)
 
 func _unhandled_input(event) -> void:
+	# Esc 回主菜单：场景切换是双向的，进得来也要回得去
+	if event.is_action_pressed("ui_cancel"):
+		get_tree().change_scene_to_file("res://main_menu.tscn")
+		return
 	if event.is_action_pressed("next"):
 		unlocked = mini(unlocked + 1, LEVEL_COUNT)
 		save_progress()
