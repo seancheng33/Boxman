@@ -107,7 +107,7 @@ func _unhandled_input(event) -> void:
 
 	var box_index := find_box(target)
 	if box_index != -1:
-		# 前面蹲着箱子，那就要多看一格：箱子要去哪儿
+		# 前面蹲着箱子，那就要多看一格：箱子要去哪里
 		var beyond := target + dir
 		if not can_enter(beyond):
 			return                  # 箱子后面进不去，人和箱子都别动
