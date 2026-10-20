@@ -10,3 +10,5 @@ shot_*.png
 
 # 本地验证产物
 build/
+.tools/
+tutorial/.godot/
