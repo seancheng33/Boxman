@@ -1,0 +1,76 @@
+[gd_scene load_steps=2 format=3 uid="uid://cselectpage1601"]
+
+[ext_resource type="Script" path="res://select_page_demo.gd" id="1_script"]
+
+[node name="SelectPageDemo" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="TitleLabel" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 400.0
+offset_bottom = 44.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 22
+text = "推箱子 —— 选关"
+
+[node name="Grid" type="GridContainer" parent="."]
+offset_left = 16.0
+offset_top = 56.0
+offset_right = 280.0
+offset_bottom = 216.0
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 3
+
+[node name="PrevBtn" type="Button" parent="."]
+offset_left = 16.0
+offset_top = 224.0
+offset_right = 104.0
+offset_bottom = 256.0
+theme_override_font_sizes/font_size = 16
+text = "← 上一页"
+
+[node name="PageLabel" type="Label" parent="."]
+offset_left = 112.0
+offset_top = 224.0
+offset_right = 192.0
+offset_bottom = 256.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 16
+text = "第 1 / 2 页"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NextBtn" type="Button" parent="."]
+offset_left = 200.0
+offset_top = 224.0
+offset_right = 288.0
+offset_bottom = 256.0
+theme_override_font_sizes/font_size = 16
+text = "下一页 →"
+
+[node name="TipLabel" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 268.0
+offset_right = 496.0
+offset_bottom = 292.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 16
+text = "已解锁 5 / 7 关"
+
+[node name="StatusLabel" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 300.0
+offset_right = 496.0
+offset_bottom = 332.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 18
+text = "第 1 关预览：1 个箱子，1 个目标点"
+
+[connection signal="pressed" from="PrevBtn" to="." method="_on_prev"]
+[connection signal="pressed" from="NextBtn" to="." method="_on_next"]
