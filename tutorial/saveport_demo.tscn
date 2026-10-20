@@ -1,0 +1,76 @@
+[gd_scene load_steps=2 format=3 uid="uid://csaveport2001"]
+
+[ext_resource type="Script" path="res://saveport_demo.gd" id="1_script"]
+
+[node name="SavePortDemo" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="TitleLabel" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 14.0
+offset_right = 496.0
+offset_bottom = 46.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 22
+text = "存档在哪里"
+
+[node name="ModeLabel" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 58.0
+offset_right = 496.0
+offset_bottom = 84.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 17
+text = "模式"
+
+[node name="PathLabel" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 94.0
+offset_right = 496.0
+offset_bottom = 140.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 14
+text = "存档位置："
+autowrap_mode = 2
+
+[node name="WriteBtn" type="Button" parent="."]
+offset_left = 16.0
+offset_top = 150.0
+offset_right = 156.0
+offset_bottom = 186.0
+theme_override_font_sizes/font_size = 16
+text = "写入测试数据"
+
+[node name="ReadBtn" type="Button" parent="."]
+offset_left = 168.0
+offset_top = 150.0
+offset_right = 268.0
+offset_bottom = 186.0
+theme_override_font_sizes/font_size = 16
+text = "读回"
+
+[node name="DeleteBtn" type="Button" parent="."]
+offset_left = 280.0
+offset_top = 150.0
+offset_right = 380.0
+offset_bottom = 186.0
+theme_override_font_sizes/font_size = 16
+text = "删除存档"
+
+[node name="ContentLabel" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 200.0
+offset_right = 496.0
+offset_bottom = 280.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 15
+text = "点「写入测试数据」开始"
+autowrap_mode = 2
+
+[connection signal="pressed" from="WriteBtn" to="." method="_on_write"]
+[connection signal="pressed" from="ReadBtn" to="." method="_read_back"]
+[connection signal="pressed" from="DeleteBtn" to="." method="_on_delete"]
