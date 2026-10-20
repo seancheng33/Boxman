@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3 uid="uid://cselectdemo1501"]
+
+[ext_resource type="Script" path="res://select_demo.gd" id="1_script"]
+
+[node name="SelectDemo" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="TitleLabel" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 400.0
+offset_bottom = 44.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 22
+text = "推箱子 —— 选关"
+
+[node name="Grid" type="GridContainer" parent="."]
+offset_left = 16.0
+offset_top = 56.0
+offset_right = 496.0
+offset_bottom = 168.0
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 5
+
+[node name="TipLabel" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 184.0
+offset_right = 496.0
+offset_bottom = 208.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 16
+text = "已解锁 5 / 7 关"
+
+[node name="StatusLabel" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 216.0
+offset_right = 496.0
+offset_bottom = 248.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 18
+text = "点上面的按钮进关卡"
