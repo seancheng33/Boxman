@@ -12,3 +12,4 @@ shot_*.png
 build/
 .tools/
 tutorial/.godot/
+export_test/
