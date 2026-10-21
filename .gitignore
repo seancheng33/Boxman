@@ -13,3 +13,4 @@ build/
 .tools/
 tutorial/.godot/
 export_test/
+export_test_web/

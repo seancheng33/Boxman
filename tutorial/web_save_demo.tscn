@@ -1,0 +1,89 @@
+[gd_scene load_steps=2 format=3 uid="uid://cwebsavedemo1"]
+
+[ext_resource type="Script" path="res://web_save_demo.gd" id="1_s"]
+
+[node name="WebSaveDemo" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_s")
+
+[node name="TitleLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 480.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 22
+text = "网页版存档落在哪"
+
+[node name="ModeLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 58.0
+offset_right = 488.0
+offset_bottom = 80.0
+theme_override_font_sizes/font_size = 15
+text = "检测中…"
+
+[node name="PathLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 84.0
+offset_right = 488.0
+offset_bottom = 106.0
+theme_override_font_sizes/font_size = 15
+text = "user://"
+
+[node name="WriteBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 120.0
+offset_right = 154.0
+offset_bottom = 160.0
+theme_override_font_sizes/font_size = 15
+text = "写入测试数据"
+
+[node name="ReadBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 166.0
+offset_top = 120.0
+offset_right = 266.0
+offset_bottom = 160.0
+theme_override_font_sizes/font_size = 15
+text = "读回"
+
+[node name="DeleteBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 278.0
+offset_top = 120.0
+offset_right = 378.0
+offset_bottom = 160.0
+theme_override_font_sizes/font_size = 15
+text = "删除存档"
+
+[node name="StorageBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 172.0
+offset_right = 234.0
+offset_bottom = 212.0
+theme_override_font_sizes/font_size = 15
+text = "查浏览器存储配额"
+
+[node name="ContentLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 228.0
+offset_right = 488.0
+offset_bottom = 340.0
+theme_override_font_sizes/font_size = 15
+text = "点「写入测试数据」开始"
+
+[connection signal="pressed" from="WriteBtn" to="." method="_on_write"]
+[connection signal="pressed" from="ReadBtn" to="." method="_on_read"]
+[connection signal="pressed" from="DeleteBtn" to="." method="_on_delete"]
+[connection signal="pressed" from="StorageBtn" to="." method="_on_storage"]
