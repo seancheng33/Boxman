@@ -2,6 +2,10 @@
 dist/*
 # Godot 3 导入缓存目录（元数据 sidecar *.import 仍需跟踪）
 .import/
+# Godot 4 缓存目录（误用 4.x 打开 3.5 工程根目录时会生成，且会把工程自动升级）
+.godot/
+# 文档配图的 Godot 4 sidecar（配图只给文章引用，不该被引擎导入）
+docs/**/*.import
 # 系统垃圾文件
 .DS_Store
 Thumbs.db
