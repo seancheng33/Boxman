@@ -51,6 +51,7 @@ Open the play URL directly: <http://three-corner.xyz/static/boxman/Boxman.html>
 - **Localization**: all UI strings live in the `TEXTS` table in `global.gd`; the language preference is persisted next to `progress.cfg` (portable location on desktop, `user://settings.cfg` on HTML5/editor)
 - **Level select**: paged number grid + SubViewport live preview of the selected level (always in sync with the real level, inherits the color theme); no pre-rendered screenshots involved
 - Export: `export_presets.cfg` includes `include_filter="*.txt"` so exported builds carry the level data
+- **Exe icon**: `application/modify_resources=true` with `application/icon="res://icon.ico"` (multi-size ICO, 16-256px). Godot 3.x rewrites PE resources via [rcedit](https://github.com/electron/rcedit); place `rcedit-x64.exe` next to the editor binary, or point *Editor Settings -> Export -> Windows -> rcedit* at it (export fails outright if it is not found)
 
 ## Level Verification
 

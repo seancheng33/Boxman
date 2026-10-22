@@ -51,6 +51,7 @@
 - **多语言**：文案集中在 `global.gd` 的 `TEXTS` 表，语言偏好持久化在 `user://settings.cfg`
 - **选关界面**：分页数字网格 + SubViewport 实时渲染所选关卡（预览与实际关卡永远一致，自动继承配色主题），不再依赖关卡截图
 - 导出配置：`export_presets.cfg` 含 `include_filter="*.txt"`，保证导出包携带关卡数据
+- **exe 图标**：`application/modify_resources=true` + `application/icon="res://icon.ico"`（多尺寸 ICO，16~256px）。Godot 3.x 需借助 [rcedit](https://github.com/electron/rcedit) 改写 PE 资源才能换掉 exe 文件图标，导出前请把 `rcedit-x64.exe` 放在编辑器同级目录，或在「编辑器设置 → Export → Windows → rcedit」里指定路径（未配置时导出会直接失败）
 
 ## 关卡质量验证
 
