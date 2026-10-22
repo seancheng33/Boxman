@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>通关就没得玩了？加三行，让游戏自己跳下一关</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 13 篇</span></div>
+<div class="card">
+<h1 class="title">通关就没得玩了？加三行，让游戏自己跳下一关</h1>
+<div class="meta"><b>摘要</b>　关卡已经是一份文本了，多备几份轮着读就是多关卡。这篇把三份地图装进一个数组，加个数字记住当前第几关，通关按 N 切下一关。顺带讲清换关那两个坑：撤销记录没清、动画没掐。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>上一篇将地图搬咗出代码，变成一份文本，改关卡唔使再郁代码。不过就得一关，通咗关就冇得玩。</p>
+<p>今天多备两份文本，通关按 N 直接跳下一关。听落好顺，不过换关嗰一刻有两个坑等住你。</p>
+<h2>多关卡，就是数组的数组</h2>
+<p>一份文本本来就是个数组，一行一个元素。那多关卡怎么办？再套一层就搞掂。</p>
+<p>外面嗰层嘅第 0 项就系第一关，第 1 项就系第二关。就咁多，冇嘢喇。</p>
+<figure><img src="../img/13/13_compare.png" alt="三关并排对比"><figcaption>三关并排对比</figcaption></figure>
+<p>三关难度是我排着来的：第一关推一下就赢，第二关两个箱子左右各推一个，第三关得绕到箱子底下往上顶。</p>
+<p>写这三关的时候我干过一件蠢事：凭手感摆完就跑，结果第三关无论怎么推都差一格。后来学乖了，写完文本先拿脚本跑一遍求解器，确认它真能通关再往里填。推箱子这东西，摆错了就是死局，玩家推到一半才发现推不动，那体验很劝退。</p>
+<h2>一个函数管所有关卡</h2>
+<p>关卡多了，得有个东西记住「现在在第几关」。一个整数够。</p>
+<p>然后所有换关的动作都走同一个入口：换关是它，重开本关也是它。这么写不用维护两套逻辑，改一处两处都对。</p>
+<p>跳下一关单独封一层，主要是放那个边界判断——已经到最后一关就没得跳了。这个判断别省，省了的话按到最后一关再按 N，直接数组越界报错。</p>
+<h2>坑一：撤销记录没清</h2>
+<p>呢个系我今日真正踩到嘅坑。</p>
+<p>前面我们做了 Z 键撤销，每走一步往历史记录里压一份存档。问题来了——这份存档记的是<strong>上一个关卡</strong>的箱子坐标。</p>
+<p>我实测了一遍：在第一关走一步，历史里有 1 条；按 N 切到第二关，要是没清，这 1 条还在。这时候你手贱按一下 Z，它会把第一关的箱子坐标写回第三关。画面上一半是这关的箱子、一半是上关的箱子，看着像渲染出了 bug，查半天查不到。</p>
+<p>所以换关函数开头嗰句清空唔系洁癖，系必需嘅。</p>
+<figure><img src="../img/13/13_level1.png" alt="第 1 关开局，左上角显示当前关号与可撤销步数"><figcaption>第 1 关开局，左上角显示当前关号与可撤销步数</figcaption></figure>
+<h2>坑二：动画没掐</h2>
+<p>这个更隐蔽。</p>
+<p>移动是用补间动画摊到 0.12 秒跑的，你要是在小人还在半路上就按 N，那个补间<strong>不会因为你换了关就自己停</strong>。</p>
+<p>我做了个对照实验：给一个精灵起个补间往 x=300 走，1 秒到；走了一半我把它挪到新位置，然后等 0.5 秒再看——位置变成了 (148.18, 101.21)。</p>
+<p>既不是我新设的位置，也不是终点。它在按老目标继续算插值，把新位置整个盖掉了。</p>
+<p>解决办法是把补间存成变量，换关前掐掉。0.12 秒好短，正常玩唔容易撞到，但「唔容易撞到」嘅 bug 先最烦——上线三个月之后有人同你讲，个箱偶尔会飘，你估我点知。</p>
+<h2>最后一关要说句不一样的话</h2>
+<p>通关面板上那句话得看情况变：最后一关说「全部通关」，前面的说「按 N 进下一关」。</p>
+<p>这里有个减一要留神：数组从 0 数，关号从 1 数，这两个数永远差 1。我喺呢种地方栽过嘅次数，唔会比数组越界少。</p>
+<h2>跑起来</h2>
+<figure><img src="../img/13/13_win1.png" alt="按一次 D，第 1 关通关"><figcaption>按一次 D，第 1 关通关</figcaption></figure>
+<p>按 N 跳到第二关，箱子从一个变成两个，目标点也换了位置，上一关的东西一点没留。</p>
+<figure><img src="../img/13/13_level2.png" alt="切到第 2 关"><figcaption>切到第 2 关</figcaption></figure>
+<figure><img src="../img/13/13_level3.png" alt="第 3 关，这时再按 N 画面纹丝不动"><figcaption>第 3 关，这时再按 N 画面纹丝不动</figcaption></figure>
+<p>最后再按一次 N，画面纹丝不动。我把前后两张截图做过像素比对，0 个像素不同，说明最后一关的边界判断生效了。</p>
+<figure><img src="../img/13/13_code.png" alt="脚本里的关卡数组与换关函数"><figcaption>脚本里的关卡数组与换关函数</figcaption></figure>
+<figure><img src="../img/13/13_editor.png" alt="场景树与运行界面"><figcaption>场景树与运行界面</figcaption></figure>
+<h2>最后</h2>
+<p>这篇真正值钱的不是「数组套数组」，那个你一想就通。值钱的是换关那两个坑：<strong>换关不是换个关卡号就完事，凡是跨关还活着的东西，都得挨个点名</strong>。</p>
+<p>数据类嘅要清，动画类嘅要掐，显示类嘅要收埋。</p>
+<p>现在能一关一关往下推了。仲有个问题：关咗游戏再开返，又由第一关开始，通咗几关冇人记得。下一篇做存档，把通关进度写进文件。</p>
+<p>三关推得落喇，点赞加在看撑下我；想睇存档点做，<strong>关注「山岚的运维笔记」</strong>，下一篇接着写。评论区吹水。</p>
+</div></div></body></html>

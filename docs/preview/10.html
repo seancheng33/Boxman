@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>箱子都归位了，游戏却没提示我赢了</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 10 篇</span></div>
+<div class="card">
+<h1 class="title">箱子都归位了，游戏却没提示我赢了</h1>
+<div class="meta"><b>摘要</b>　箱子会推了，可它们不知道自己该去哪里。这篇给箱子找几个「家」——目标点，再解决一件事：什么时候算赢。答案比想的简单，每走一步重新问一次就行。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>上一篇箱子推得动又推唔动喇，输赢嘅规矩都定咗。不过佢哋唔知自己应该去边，推嚟推去纯粹锻炼身体。</p>
+<p>今日帮箱子搵几个「家」，再搞掂一件更要紧嘅事：几时先至算赢。</p>
+<h2>目标点，还是一组坐标</h2>
+<p>跟箱子一个路数。目标点不是画上去的花纹，它也是一组坐标，画的时候就照着这组坐标描框。</p>
+<figure><img src="../img/10/10_goals.png" alt="目标点画法放大，绿色空心小方框就是「家」"><figcaption>目标点画法放大，绿色空心小方框就是「家」</figcaption></figure>
+<p>箱子推进去，我就把它染成绿色，一眼能看出哪个归位了。</p>
+<h2>赢没赢，一个循环就问出来了</h2>
+<p>胜利判定我一开始想复杂咗，琢磨住要唔要记「推咗几步」「边个箱子入咗边个坑」。其实不用。</p>
+<p>赢，就等于：每个目标点上都蹲着一个箱子。遍历目标点，有一个上面没箱子就直接不算，全都有才算。</p>
+<p>这里有个方向问题值得说：要查的是目标点，不是箱子。反过来写（遍历箱子看它在不在目标上）也能跑，但逻辑会绕——箱子数量和目标点数量万一不等，你就得额外处理。</p>
+<p>从目标点出发问「你那里有箱子吗」，问法跟需求一一对应，读起来不用拐弯。</p>
+<h2>数据变了，外观得跟着刷</h2>
+<p>箱子染绿这件事，我写成一个统一的函数，数据一变就调它。里面干两件事：给箱子染色，顺便决定面板显不显示。</p>
+<p>染色用的是 Godot 里的 modulate 属性，它是乘在原来颜色上的，填白色就等于不上色、原样。</p>
+<p>这里有个习惯我想推荐：数据改完，统一走一个函数刷外观，别在每个改动的地方各写一遍染色的代码。将来要加「归位时播个音效」「归位数显示在角落」，也只改这一个函数。</p>
+<h2>每走一步，都重新问一次</h2>
+<p>这是本篇我最想说的一句。</p>
+<p>我第一版系推完箱子之后判一次，赢咗就弹面板，完事。结果呢？通关之后我又将箱子推走咗，面板仲挂喺度，似条撕唔走嘅横幅。</p>
+<p>问题就出在「判一次」上。<strong>胜利不是一个事件，是一个状态。</strong> 状态这东西，得每次数据变了就重新算。</p>
+<figure><img src="../img/10/10_compare.png" alt="再按一次，箱子被推离目标，面板自己就消失了"><figcaption>再按一次，箱子被推离目标，面板自己就消失了</figcaption></figure>
+<p>改成每步都问之后，推离目标点，面板自己就没了。</p>
+<h2>成功面板用 CanvasLayer</h2>
+<p>面板是 UI，得挂在 CanvasLayer 下面。普通节点跟着场景走，摄像机一动它就跑；CanvasLayer 里的东西钉在屏幕上，不管游戏画面怎么滚。UI 就该放这一层。</p>
+<figure><img src="../img/10/10_editor.png" alt="场景树里的 WinLayer"><figcaption>场景树里的 WinLayer</figcaption></figure>
+<p>节点结构是 CanvasLayer 下面挂一个半透明的色块当遮罩，再挂一个 Label 写字。想显示就把这一层的 visible 打开，想隐藏就关掉，一行搞定。</p>
+<h2>跑起来，推一下</h2>
+<p>起点我摆成这样：一个箱子一开始就在目标点上（绿的），另一个还差一格。</p>
+<figure><img src="../img/10/10_run.png" alt="起点，一个已在目标上，另一个还没"><figcaption>起点，一个已在目标上，另一个还没</figcaption></figure>
+<p>呢个叫二分之一，唔算赢，面板唔畀面。</p>
+<figure><img src="../img/10/10_win.png" alt="按一次，两个目标点都满了，通关面板弹出"><figcaption>按一次，两个目标点都满了，通关面板弹出</figcaption></figure>
+<p>面板上就一行字。字不重要，重要的是它为什么这时候出现——因为判定函数这时候终于返回了「是」。</p>
+<h2>最后</h2>
+<p>今天三句话。目标点也是一组坐标，跟箱子一个路数。胜利判定是遍历目标点问「你那里有箱子吗」，别绕。胜利是个状态，每走一步都得重新问一次，别只判一次。</p>
+<p>而家游戏有输赢喇，不过推错一步净系得个睇字。下一篇帮佢加后悔药——Z 键撤销，用栈将行过嘅每一步记低。</p>
+<p>箱子识返屋企喇，呢篇抵一个点赞、在看；想跟足全程嘅，关注「山岚的运维笔记」。评论区有问必回。</p>
+<p>（配套工程在 GitHub 的 Boxman 仓库 tutorial 分支，每篇一个进度 tag，随时能下到对应版本。）</p>
+</div></div></body></html>

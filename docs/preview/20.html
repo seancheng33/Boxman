@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>便携化存档：三道关卡，永远留后路</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 20 篇</span></div>
+<div class="card">
+<h1 class="title">便携化存档：三道关卡，永远留后路</h1>
+<div class="meta"><b>摘要</b>　user:// 把存档藏在玩家系统目录深处，想备份都找不到。这篇给存档搬家：优先写 exe 同级目录，用"写探针"验证可写，不行就回退 user://。附带一个教训：场景文件里 connection 段插错了位置，按钮点下去没反应。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>存档仲系匿喺玩家系统嘅死角——AppData 深处，想备份都揾唔到地方。我见过最离谱的求助是"我重装了系统，游戏还在 D 盘，进度没了"——进度好好的，躺在 C 盘 AppData 的废墟里。</p>
+<p>解法就是便携化：存档写在游戏文件夹里，游戏去哪它去哪。成个文件夹拷去 U 盘，进度跟住走。</p>
+<h2>三道关卡，谁才有资格用便携模式</h2>
+<p>存档位置不是拍脑袋定的，走一套裁决流程。</p>
+<p>第一关：编辑器。编辑器里跑，程序拿到的"exe 路径"是编辑器自己的安装目录——照搬便携逻辑，存档就写进 Godot 的安装目录，这种事干了会被未来的自己骂。所以编辑器环境直接回退，引擎有现成的特征判断，跑在编辑器里它就是 true。</p>
+<p>第二关：网页版。浏览器沙箱里没有真正的文件系统，也直接回退。</p>
+<p>第三关：写探针。到了导出版的本地环境，也不是闭眼写——玩家完全可能把游戏装在 Program Files 里，那目录对普通程序是只读的。裁决方式简单粗暴：往目标目录写一个探针小文件，马上就知道能不能写，写得进去就说明可写，写完立刻删；写不进去就回退。用实测代替假设，点都好过查一堆系统 API，呢条规矩系我踩咗几次坑之后定落嚟嘅。</p>
+<p>三关全过，存档先至入到 exe 同级目录；任何一关唔过，都退回原处。玩家永远不会因为"便携化"而丢档，这是底线。</p>
+<figure><img src="../img/20/20_idle.png" alt="编辑器里跑，正确显示回退模式和 user:// 路径"><figcaption>编辑器里跑，正确显示回退模式和 user:// 路径</figcaption></figure>
+<h2>写文件必须判空</h2>
+<p>写入用打开文件的接口，返回空就是失败，错误码可以打出来看——磁盘满、目录只读、路径乱码，全在这一步现形。写完记得关，唔好指望垃圾回收帮你收尾，缓冲区冇刷盘嗰种痛，边个痛过边个知。</p>
+<figure><img src="../img/20/20_written.png" alt="点写入后，读回内容一字不差"><figcaption>点写入后，读回内容一字不差</figcaption></figure>
+<h2>这一篇最大的坑</h2>
+<p>截图流程走到一半，按钮突然全部失灵：点写入没反应。查咗一圈，代码冇问题、焦点冇问题、键盘事件都到咗——最后喺场景文件度捉到真凶。</p>
+<p>给按钮连信号，场景文件里会多几行连接声明。我用脚本批量改文件时，把这几行插在了某个节点的属性中间——场景文件是有格式的：所有节点在前、连接声明必须在最后。插错了位置，解析器直接报错，连接整个没加载，按钮自然成了摆设。</p>
+<p>修好之后实测：空格按下，写入、读回、删除，一条链全通。</p>
+<p>给你两条预防针：手改场景文件要小心段落顺序；改完先跑一遍无头模式，解析错误当场现形——这次就是一行 Parse Error 救的场。</p>
+<h2>编辑器里测不出便携模式，怎么办</h2>
+<p>编辑器里跑，永远是回退模式。便携模式要导出的 exe 才能走到第三关，而导出是下一篇的事。顺序别搞反：先有"可写就便携、不可写就回退"的裁决逻辑，再谈导出。反过来做，就系先打包装箱，再发现玩家存档周围乱咁扔。</p>
+<h2>最后</h2>
+<p>关键词：取 exe 路径、写探针、回退。便携化不是"换个目录写"这么一句漂亮话，是三道关卡裁决加永远留后路的工程决策。</p>
+<p>下一篇正式开始导出：把这套教程工程打包成 Windows 可执行文件，把导出参数那些坑一个个踩给你看。</p>
+<p>存档跟住 exe 走咗，值得<strong>点赞、在看</strong>嚟一套；想睇游戏变成 exe 嘅，<strong>关注「山岚的运维笔记」</strong>，下一篇接着。评论区有问必回。</p>
+</div></div></body></html>

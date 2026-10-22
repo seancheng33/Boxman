@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>按了 Z 没反应，我查了半天键位，结果是数组在搞我</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 11 篇</span></div>
+<div class="card">
+<h1 class="title">按了 Z 没反应，我查了半天键位，结果是数组在搞我</h1>
+<div class="meta"><b>摘要</b>　推箱子最怕推错一步。这篇给它加撤销：用一个数组当栈，每走一步把「动之前」的样子存一笔，Z 键弹出来就退回去。顺带讲两个必踩的坑——数组存的是引用，还有存档必须赶在改数据之前。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>上一篇游戏有输赢喇，不过推错一步净系得个睇字，要由头嚟过。推箱子呢个游戏，一步行错整关报废，真系最劝退嘅体验。</p>
+<p>今日同佢加粒后悔药：按 Z 就退返一步，用个栈将每一步记落嚟。</p>
+<h2>撤销要存什么</h2>
+<p>答案很朴素：存「这一步动之前」的样子。</p>
+<p>不是记「我按了往右」，也不是记「我走了一格」。存动作的话，撤销时你得反过来推——往右走了一格，撤销就是往左走一格；可万一那一步是推箱子呢？箱子往回滚一格，人往回退一格，两个动作，顺序还不能错。</p>
+<p>存状态就冇咁头痕，省心好多。动之前，将人同箱子喺原位影张相；要撤销，就将张相攞返出嚟贴返上去，搞掂。</p>
+<h2>第一个坑：数组存的是引用</h2>
+<p>这段是我本篇最想让你看的地方。</p>
+<p>GDScript 里，数组、字典、对象这些是引用类型。你把它塞进另一个数组，拿到的不是一份拷贝，是同一份东西的门牌号。</p>
+<p>也就是说，你要是图省事直接把箱子数组塞进历史里，存进去的和外面那个是同一个数组。等你下一步把箱子往前推一格，历史记录里那份也跟着变了。等你想撤销，弹出来的「历史」跟现在一模一样，按 Z 毫无反应。</p>
+<p>我第一版就是这个毛病。按咗 Z，画面郁都唔郁，我仲以为系按键冇绑上，查咗半日键位。</p>
+<p>解决办法是存之前先复制一份，Godot 里有专门的方法干这个。复制出来的那份跟原件再无瓜葛。</p>
+<h2>第二个坑：存档要赶在改数据之前</h2>
+<p>顺序很要紧。存档必须排在改数据之前。存晚了，存的就是「走之后」的样子，等于没存。</p>
+<p>还有个顺带的好处：撞墙、推不动这些情况，走的是提前返回的分支，压根没走到存档那一步。所以「撞墙那一下」不会进历史，撤销也就不会退回到一个你根本没动过的地方。</p>
+<p>净系真正行咗嗰一步，先配有后悔药。</p>
+<h2>栈，就是个数组</h2>
+<p>「栈」这词听着吓人，落到代码里就是一个数组，加上两个动作：从尾巴塞进去，从尾巴拿出来。</p>
+<p>后进先出。最后存的那步，第一个被撤掉——正好符合直觉。</p>
+<figure><img src="../img/11/11_code.png" alt="脚本里的存档与撤销函数"><figcaption>脚本里的存档与撤销函数</figcaption></figure>
+<p>里面还有一句兜底：栈空了就别硬撤。不然取出来是个空值，后面直接崩。</p>
+<h2>绑个键</h2>
+<p>第 07 篇说过，键位和动作名要分开。撤销也一样，加个叫 undo 的动作，绑到 Z 上。</p>
+<figure><img src="../img/11/11_inputmap.png" alt="项目设置里给 undo 动作绑上 Z 键"><figcaption>项目设置里给 undo 动作绑上 Z 键</figcaption></figure>
+<p>将来你想改成别的组合键，或者给手柄也配一个，只动这个面板，代码一行不用改。</p>
+<p>代码这边就两行：检测到撤销动作，调撤销函数，然后直接返回。撤销跟走路是两码事，处理完就走，别让它掉进下面走路的逻辑里。</p>
+<h2>跑起来，推两步再撤</h2>
+<p>起点：一个箱子已在目标上（绿的），另一个还差一格。右下角那行字是栈里还剩几步。</p>
+<figure><img src="../img/11/11_run.png" alt="起点，可撤销步数 0"><figcaption>起点，可撤销步数 0</figcaption></figure>
+<p>按两次往右。第二次把箱子推过了目标点，反而没赢。</p>
+<figure><img src="../img/11/11_push2.png" alt="按两次，箱子被推过目标点"><figcaption>按两次，箱子被推过目标点</figcaption></figure>
+<p>按一次 Z，退回上一步——箱子回到目标点，通关面板跟着弹出来。</p>
+<figure><img src="../img/11/11_undo1.png" alt="按一次 Z，退回上一步"><figcaption>按一次 Z，退回上一步</figcaption></figure>
+<figure><img src="../img/11/11_compare.png" alt="撤销前后对比"><figcaption>撤销前后对比</figcaption></figure>
+<p>我一直按到底，将两步都撤晒，画面返到起点嗰张，同最初像素级一模一样。再按一次 Z，个栈早就空晒，画面郁都唔郁——兜底嗰句起作用喇。</p>
+<h2>最后</h2>
+<p>今天三句话。撤销存的是状态不是动作，存「动之前」的样子。数组是引用，存进历史之前一定先复制，不然历史跟着一起变。存档要排在改数据之前，撞墙那些没走成的步子本来就不该进历史。</p>
+<p>而家推得、撤得、赢都得，不过地图系写死喺代码入面。下一篇将地图抽出嚟做一份文本文件，改关卡唔使再动代码。</p>
+<p>后悔药配好喇，想睇下集就点赞加在看；关注「山岚的运维笔记」，下一篇将张地图搬出代码。</p>
+<p>（配套工程在 GitHub 的 Boxman 仓库 tutorial 分支，每篇一个进度 tag，随时能下到对应版本。）</p>
+</div></div></body></html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>我画了个 16 像素的小人，结果它糊成了一团</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 05 篇</span></div>
+<div class="card">
+<h1 class="title">我画了个 16 像素的小人，结果它糊成了一团</h1>
+<div class="meta"><b>摘要</b>　辛辛苦苦画的像素小精灵，拖进引擎却糊成毛玻璃。今天讲清楚 Sprite2D 怎么挂图，以及那个让像素画变清晰的关键开关。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>前四篇我们一直在跟文字较劲，今天想换个活法——让屏幕里出现一个「人」。</p>
+<p>我特意画了个 16×16 的小家伙，棕头发、蓝上衣。照着当年街机厅那些像素小人画的，歪是歪了点，但我挺得意。结果拖进引擎一跑，我盯住个屏幕呆咗三秒——佢糊咗，似隔住一层毛玻璃。</p>
+<p>唔关张图事。系引擎默认将像素当照片咁「抹匀」咗。</p>
+<h2>先把素材放进项目</h2>
+<p>素材得先住进项目文件夹，引擎才认。我新建了个 sprites 文件夹，把画好的图拖进去。等一两秒，`player.png` 旁边会多出一个 `.import` 文件，那个别手欠删，引擎靠它对账。</p>
+<h2>加一个 Sprite2D，把图挂上去</h2>
+<p>场景树里点根节点，右键「添加子节点」，搜 Sprite2D，加进来。</p>
+<figure><img src="../img/05/05_editor.png" alt="Sprite2D 节点与检查器里的纹理"><figcaption>Sprite2D 节点与检查器里的纹理</figcaption></figure>
+<p>这里提前说个坑：Godot 4 里这节点叫 Sprite2D，不是老教程里的 Sprite。你照住 Godot 3 嘅教程搜，一样搜到，但嗰个系另一个东西，跟住做就会卡死，唔好怀疑自己。</p>
+<p>选中它，右边检查器第一栏就是 Texture，点小箭头「加载」，选我们刚拖进来的图。啪一下，2D 视口里那个小人就冒出来了，场景树后面也挂上了缩略图。</p>
+<h2>它为啥糊？</h2>
+<p>唔使急住跑，我哋先将问题睇清楚。检查器里把 Scale 调成 8，让小人放大 8 倍。然后就糊了：</p>
+<figure><img src="../img/05/05_blurry.png" alt="默认线性过滤，小人边缘糊掉"><figcaption>默认线性过滤，小人边缘糊掉</figcaption></figure>
+<p>看出来没？边缘糊糊的，头发和脸的界线像被人用湿手指抹过。</p>
+<p>原因不复杂。我们那张图只有 16×16 个像素，现在要显示成 128×128，多出来的像素得靠引擎「猜」。默认的猜法叫线性过滤，它把相邻两个像素的颜色按比例混一混，看起来平滑。对照片是好事，对像素画就是灾难，硬边全被揉软了。</p>
+<p>像素画要的是另一种猜法，叫最近邻：别混，谁近就用谁的颜色。放大后就是一个一个硬方块，那才是复古味。</p>
+<figure><img src="../img/05/05_compare.png" alt="最近邻 vs 线性，放一起看"><figcaption>最近邻 vs 线性，放一起看</figcaption></figure>
+<p>左边清爽，右边发虚，差嘅就系一个开关。</p>
+<h2>把最近邻设成默认</h2>
+<p>改法有两个。只改这一个精灵的话，选中 Sprite2D，检查器往下拉，找 CanvasItem 里的 Texture → Filter，改成 Nearest。</p>
+<p>我建议改全局：菜单「项目」→「项目设置」，左边找 Rendering → Textures → Canvas Textures，把 Default Texture Filter 设成 Nearest。以后新加的图默认就是像素风，一劳永逸。</p>
+<p>设完再跑一次：</p>
+<figure><img src="../img/05/05_crisp.png" alt="换成最近邻，像素边缘清爽"><figcaption>换成最近邻，像素边缘清爽</figcaption></figure>
+<p>边缘硬返，方块感返嚟喇，嗰个歪歪扭扭嘅小人终于有返当年嘅味道。</p>
+<h2>最后</h2>
+<p>今天其实就记一句话：像素画要 Nearest，不要 Linear。剩下的挂图，点两下就会。</p>
+<p>那个小人现在能站着了，但还不会动，也没地图管着它。下一篇我们给它铺一张真正的地图，讲坐标系和网格——推箱子的一切，都是从一个格子一个格子开始的。</p>
+<p>像素小人企稳咗，点赞 + 顺手点个在看；关注「山岚的运维笔记」，后面接着畀佢装脑子。评论区吹水都得。</p>
+<p>下一篇见。</p>
+<p>（配套工程在 GitHub 的 Boxman 仓库 tutorial 分支，每篇一个进度 tag，搜 seancheng33/Boxman 就能找到。）</p>
+</div></div></body></html>

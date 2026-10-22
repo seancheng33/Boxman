@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>浏览器里也能玩推箱子，网页版导出踩坑实录</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 22 篇</span></div>
+<div class="card">
+<h1 class="title">浏览器里也能玩推箱子，网页版导出踩坑实录</h1>
+<div class="meta"><b>摘要</b>　exe 双击就能玩，浏览器呢？这篇把推箱子导到网页版：写 Web 预设、踩跨源隔离的坑、修中文变方块，最后把存档这事说透——网页版的 user:// 落在浏览器 IndexedDB 里，跟桌面版完全是两套逻辑。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>上一篇把游戏变成了 exe，双击即玩。但唔系个个都用 Windows，更唔系个个都愿意下载一个几十兆嘅文件。</p>
+<p>呢一篇将佢塞入浏览器——打开网址就玩得，跨平台，仲唔使装任何嘢。</p>
+<h2>网页版的产物不是一个文件</h2>
+<p>桌面版导出得到 exe 加 pck 两个文件，网页版导出一整个目录，九个文件。核心三个：index.html 是页面外壳，index.wasm 是引擎运行时（35MB），index.pck 是你的工程资源。剩下的是 worker、图标之类的配套。</p>
+<p>有个区别必须记住：桌面版双击 exe 就跑，网页版<strong>必须挂在 HTTP 服务器上</strong>。直接双击 index.html？浏览器会用 file:// 协议加载 wasm，那是不安全的上下文，直接失败。</p>
+<h2>第一个坑：跨源隔离头，不配就拒绝启动</h2>
+<p>我第一次导完，打开浏览器一片黑，报错框写住：跑 Godot 网页版需要嘅功能缺失——Cross Origin Isolation、SharedArrayBuffer，请检查 web 服务器配置。</p>
+<p>这不是 bug，是 Godot 4.2 的网页版默认要 SharedArrayBuffer——一个多线程共享内存 API，不用怀疑自己工程有问题。浏览器为了安全，只在页面处于跨源隔离状态时才开放它。</p>
+<p>要进入跨源隔离，服务器必须发两个响应头：</p>
+<p>Cross-Origin-Opener-Policy: same-origin Cross-Origin-Embedder-Policy: require-corp</p>
+<p>一个管窗口隔离，一个管资源嵌入策略。Python 起本地服务器就两行代码的事，Nginx 线上也就是加两个 add_header。</p>
+<figure><img src="../img/22/22_coi.png" alt="缺跨源隔离头，引擎直接拒绝启动"><figcaption>缺跨源隔离头，引擎直接拒绝启动</figcaption></figure>
+<figure><img src="../img/22/22_code.png" alt="服务器加两个响应头就行"><figcaption>服务器加两个响应头就行</figcaption></figure>
+<p>顺手讲句：Godot 4.2 嘅导出预设里有个线程支持选项，熄咗佢就唔需要 SharedArrayBuffer，连呢两个头都唔使配。代价是多线程用不了，大型项目会有点吃亏。小游戏图省事可以关，要性能就老老实实配服务器。</p>
+<h2>第二个坑：中文全变方块</h2>
+<p>跨源隔离配好，游戏跑起身——但界面一片豆腐块，「推箱子」三个字变咗三个方框。</p>
+<p>原因很简单：桌面版 Godot 能调用系统字体，网页版不行。浏览器沙箱里没有系统字体可借，引擎只能用内置字体渲染，而内置字体不含中文字形。</p>
+<p>解法是自己带一份。找一份可再分发的中文字体放进工程，这一步就搞定了，我用的是 GNU Unifont，12MB。然后建个主题把字体设成默认，再在项目配置里挂上。</p>
+<p>打包后 pck 从 108KB 涨到 4.4MB——字体只占实际用到的那点字形，引擎做的是动态子集化，不是整个字体塞进去。想更小就换更精简的字体，或者自己裁字形。</p>
+<h2>网页版导出预设</h2>
+<p>跟桌面版一个套路，在预设文件里加一个 Web 平台的预设，命令行改预设名和输出路径就行。</p>
+<p>有个选项必须开：画布自适应策略设成"自适应"，浏览器窗口缩放画布跟着缩，网页版不开这个就是灾难。另一个：页面打开时焦点直接落在画布上，键盘立刻能操作。不开的话玩家得先点一下鼠标才能用键盘——这是网页游戏第一大劝退点，我见过太多人在这第一步就走了。</p>
+<h2>存档：网页版跟桌面版完全不是一套逻辑</h2>
+<p>呢个先系本篇真正想讲嘅。回到第 20 篇那个伏笔——便携模式要导出的 exe 才能走到第三关，网页版为什么必然回退？</p>
+<p>答案在这个演示页里。user:// 全局化之后是这么一串：/userfs/godot/app_userdata/tutorial/</p>
+<p>/userfs/ 这个前缀就是答案。桌面版的 user:// 是磁盘上真实的一个文件夹，Windows 上在 AppData 里，你能在文件管理器里翻到它。网页版的 user:// 是一套虚拟文件系统——Godot 4.2 用 IndexedDB 加 IDBFS 在浏览器里模拟了一个 POSIX 风格的盘，路径长得像磁盘路径，实际上数据躺在浏览器的 IndexedDB 里。</p>
+<p>写入同读回照常工作，API 一行都唔使改。这就是"回退模式"的真正含义：网页版没有"exe 同级目录"这回事，你没法往浏览器里写一个文件夹出来，所以那套裁决逻辑在网页版直接走第二关返回 user://，一点不亏心。</p>
+<figure><img src="../img/22/22_web_save.png" alt="网页版的 user:// 落在哪"><figcaption>网页版的 user:// 落在哪</figcaption></figure>
+<figure><img src="../img/22/22_web_idb.png" alt="写入 + 读回全通"><figcaption>写入 + 读回全通</figcaption></figure>
+<figure><img src="../img/22/22_web_storage.png" alt="浏览器存储查询，indexedDB 可用"><figcaption>浏览器存储查询，indexedDB 可用</figcaption></figure>
+<p>不过有几个坑你一定要知，唔好中招：</p>
+<p>清咗浏览器缓存，存档就即刻冇。桌面版玩家删了游戏文件夹才会丢档，网页版玩家在设置里点"清除浏览数据"，进度就没了，IndexedDB 会被一起清掉。正式发布最好加个云存档兜底。</p>
+<p>换浏览器就是另一个存档。Chrome 存的进度 Firefox 看不到，IndexedDB 是按源隔离的。</p>
+<p>无痕窗口是临时存档，窗口一关 IndexedDB 跟着没。</p>
+<p>隐私模式或存储受限时，写入可能直接失败。所以网页版嘅写入路径一定要判空、俾提示，唔可以静静鸡吞咗佢。</p>
+<h2>跑起来</h2>
+<p>一切就绪，浏览器打开，跨源隔离头到位，中文字体到位。</p>
+<figure><img src="../img/22/22_web.png" alt="浏览器里的推箱子，主菜单一个不少"><figcaption>浏览器里的推箱子，主菜单一个不少</figcaption></figure>
+<p>工程里的字体是 Unifont，笔画是点阵风格，略显朴素——但对"证明网页版能跑"这件事足够了。换成思源黑体之类的观感会好很多，代价是字体文件更大。</p>
+<h2>最后</h2>
+<p>关键词：跨源隔离、SharedArrayBuffer、Web 预设、IndexedDB。</p>
+<p>桌面版导出的心智模型是"一个 exe 加一个包"，网页版是"一个目录加两个响应头"。后者多出来的不是技术难度，是浏览器安全策略的账——高性能 API 必须在隔离环境里才给用，隔离就得有头，头就得服务器配。</p>
+<p>存档这块最值得记住：同一套代码，不同平台两套存储。桌面版的 user:// 是文件夹，网页版的 user:// 是 IndexedDB 里的虚拟盘，API 一样，脾气完全不同。</p>
+<p>下篇讲发布——把 exe 和网页版打包传到 GitHub Release，让别人能下载能玩。</p>
+<p>游戏可以喺浏览器里跑喇，值得<strong>点赞、在看</strong>嚟一套；想睇佢点样发到网上俾陌生人下载嘅，<strong>关注「山岚的运维笔记」</strong>，下一篇接着。评论区有问必回。</p>
+</div></div></body></html>

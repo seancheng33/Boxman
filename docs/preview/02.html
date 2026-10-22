@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>打开 Godot 编辑器一脸懵？这篇带你把每个面板摸个遍</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 02 篇</span></div>
+<div class="card">
+<h1 class="title">打开 Godot 编辑器一脸懵？这篇带你把每个面板摸个遍</h1>
+<div class="meta"><b>摘要</b>　场景面板、检查器、文件系统……第一次打开 Godot 容易发懵。这篇带你逛完整个编辑器，还顺手做出第一个场景。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>上篇我们装好了 Godot、建好了空项目。今天把编辑器里里外外逛一遍——顺便，做出你人生第一个场景。唔使急，全程靠点鼠标就得。</p>
+<p>第一次打开编辑器咩感受，我记到好清楚：左边一列、右边一列、中间一大片，五六个面板，个个写着奇奇怪怪的名字。像不像第一次坐进飞机驾驶舱？</p>
+<p>放心，开 Godot 这架"飞机"，常用仪表比驾驶舱少好多。</p>
+<h2>三个工作区，先分清楚</h2>
+<p>编辑器顶上有三个标签：2D、3D、Script（旁边的 AssetLib 是在线素材库，暂时当它透明）。</p>
+<p>2D 是做 2D 游戏的工作区，我们整个系列都住这里；3D 做三维的；Script 是写代码的地方，自带代码编辑器。</p>
+<p>点一下 2D，中间变成一块带标尺的平面——这就是你以后天天见的工位：</p>
+<figure><img src="../img/02/02_editor_2d.png" alt="2D 工作区全景"><figcaption>2D 工作区全景</figcaption></figure>
+<h2>场景面板：你的游戏是一棵树</h2>
+<p>左上角这个面板叫场景，是 Godot 最重要的一块：</p>
+<figure><img src="../img/02/02_dock_scene.png" alt="场景面板"><figcaption>场景面板</figcaption></figure>
+<p>佢而家空寥寥，得「创建根节点」四个快捷按钮。</p>
+<p>这里要灌一个 Godot 的核心概念：<strong>万物皆节点，节点组成树</strong>。</p>
+<p>讲个例：一个游戏关卡是一棵树——根上挂个「关卡」节点，底下分出「玩家」「墙壁」「箱子」几条枝，玩家底下还挂着「外观」「碰撞体」几片叶。左边这个面板，就是给你打理这棵树的。</p>
+<p>而家唔使完全搞懂，有个印象就得，后面每篇你都同这棵树打交道，自然就识喇。</p>
+<h2>检查器：点中谁，就调谁</h2>
+<p>右上角叫检查器，是场景面板的孪生兄弟：</p>
+<figure><img src="../img/02/02_dock_inspector.png" alt="检查器面板"><figcaption>检查器面板</figcaption></figure>
+<p>规矩好简单：<strong>点中场景树边个节点，呢度就显示佢全部可调参数</strong>——位置、大小、颜色、贴图，统统喺呢度。</p>
+<p>以后听到「改下它的 Transform」「把图拖到 Texture 上」，讲嚟讲去都系呢度操作。左边拣人，右边调参，就系咁配合。</p>
+<h2>文件系统：项目里所有家当</h2>
+<p>左下角是文件系统面板，项目文件夹里所有文件都显示在这：</p>
+<figure><img src="../img/02/02_dock_filesystem.png" alt="文件系统面板"><figcaption>文件系统面板</figcaption></figure>
+<p>图片、音效、场景、脚本，放进项目文件夹的东西它都认得。常用的文件夹还能拖进「收藏」，跟浏览器书签一个道理。</p>
+<h2>动手：第一个场景落地</h2>
+<p>逛完了，来真的。</p>
+<p>第一步，场景面板点<strong>「2D 场景」</strong>那个快捷按钮——场景树里立刻出现一个叫 Node2D 的节点，检查器同步列出一堆属性：</p>
+<figure><img src="../img/02/02_create_root.png" alt="创建根节点"><figcaption>创建根节点</figcaption></figure>
+<p>这棵树现在是一根光杆树干。Node2D 是个「带 2D 位置信息的空节点」，自己不显示任何东西，但最常用——之后墙啊箱子啊都往它身上挂。</p>
+<p>第二步，<strong>Ctrl+S</strong> 保存。弹出保存对话框，默认名是 node_2d.tscn，我们改成有意义点的：</p>
+<figure><img src="../img/02/02_save_dialog.png" alt="场景另存为对话框"><figcaption>场景另存为对话框</figcaption></figure>
+<p>改成 first_scene.tscn，回车。</p>
+<p>小知识：.tscn 是 Godot 场景文件的后缀，纯文本格式，用记事本都打开得了，不过没必要，编辑器会帮你打理。</p>
+<p>第三步，睇下成果——标题栏星号冇咗，文件系统多咗个 first_scene.tscn：</p>
+<figure><img src="../img/02/02_scene_saved.png" alt="保存完成"><figcaption>保存完成</figcaption></figure>
+<p>恭喜，第一个场景正式落袋。「建场景、改名、存档」呢套动作，之后你会重复几百次，今日算出师喇。</p>
+<h2>最后</h2>
+<p>今天认识的面板，分工好清楚：<strong>场景面板管结构，检查器管属性，文件系统管资产</strong>，加中间的视口，四件套齐了。</p>
+<p>下一篇：《Godot 入门实战 03：让场景跑起来》，讲主场景是什么、怎么按 F5 让游戏窗口真正弹出来。</p>
+<p>有用就点赞、点一下在看；后面仲有二十来篇，关注「山岚的运维笔记」唔迷路。评论区吹水都得，有问必回。</p>
+<p>下一篇见。</p>
+<p>（配套工程在 GitHub 的 Boxman 仓库 tutorial 分支，每篇一个进度 tag，随时落对应版本。）</p>
+</div></div></body></html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>箱子推不动的时候，我漏看了这一格</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 09 篇</span></div>
+<div class="card">
+<h1 class="title">箱子推不动的时候，我漏看了这一格</h1>
+<div class="meta"><b>摘要</b>　小人会撞墙就停了，可推箱子光会停不够。这篇加两个箱子，讲清一件事：推之前要看的不是一格，是两格——人要去哪里，箱子要去哪里，两处都通得过才动。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>上一篇小人学识咗撞墙就停，呢条规矩已经入咗脑。不过推箱子呢个游戏，净系识停唔够——佢要识推。</p>
+<p>今日畀佢加两个箱子，再教佢一句要紧嘅话：有啲格子睇落去入得，其实推唔动。</p>
+<h2>箱子在代码里，就是一组格子号</h2>
+<p>先说清楚箱子是什么。它不是屏幕上那个木头方块，那只是影子。箱子在代码里就是一组坐标，两个箱子就两个格子号，跟场景里那两个精灵一一对应。</p>
+<figure><img src="../img/09/09_editor.png" alt="场景树里 BoxA / BoxB / Player 三个精灵"><figcaption>场景树里 BoxA / BoxB / Player 三个精灵</figcaption></figure>
+<p>数据归数据，影子归影子。改数据，影子跟着挪；你在编辑器里手动拖影子，数据压根不认账。呢个坑我喺第 07 篇踩过一次——改咗格子号冇改位置属性，小人喺原地纹丝不动。到箱子这里是同一个道理，只是换了个名字。</p>
+<h2>推之前，要看两格</h2>
+<p>第 08 篇讲的是「走之前先问一句」。到了推箱子，这一句得问两遍。</p>
+<p>一问：人要去的格子，是不是墙？二问：要是那格上蹲着箱子，那箱子要去的格子，进得去吗？</p>
+<figure><img src="../img/09/09_code.png" alt="脚本编辑器里的 find_box 与推箱子判定"><figcaption>脚本编辑器里的 find_box 与推箱子判定</figcaption></figure>
+<p>两关都过了才真的动。任何一关唔过，即刻作废，咩都冇发生过。</p>
+<p>为什么非得先算再动？你要是先推了箱子再发现推不动，就得把箱子退回去；再往后，箱子上还挂着「推了几步」的统计、还有一步步的撤销记录，回滚起来能让你怀疑人生。先算，判唔过就当冇件事，乾手净脚。</p>
+<h2>找箱子：返回下标，别返回 true 或 false</h2>
+<p>呢段我觉得系本篇最值钱嘅地方。</p>
+<p>问「这格有没有箱子」，最直觉的回答是 true 或 false。可你问完这句，下一步十有八九是要挪它。</p>
+<p>返回 true，你得再找一遍箱子在数组第几位；返回下标，直接改那一位就搞掂。没找到就返回 -1，这是约定俗成的「没有」。判定的时候老老实实写「不等于 -1」，别图省事拿它当布尔值用，读你代码的人会谢你。</p>
+<h2>能不能进，一句话说清</h2>
+<p>能不能进 = 不是墙，而且没蹲着箱子。两个条件挤一行，调用的地方一行都不用多想。呢个函数而家睇落不起眼，后面佢系主力：加目标点、加撤销，都要先问佢一句。</p>
+<h2>跑起来，推一下试试</h2>
+<p>起点：人站在左上角，两个箱子排在右边。</p>
+<figure><img src="../img/09/09_run.png" alt="起点，人 cell(1,1)，箱子 A(2,1)、箱子 B(4,1)"><figcaption>起点，人 cell(1,1)，箱子 A(2,1)、箱子 B(4,1)</figcaption></figure>
+<p>按一下往右。人要去的格上蹲着箱子 A，那就多看一格——A 要去的那格是空地板，进得去。于是 A 被推走一格，人站上原来 A 的位置。</p>
+<figure><img src="../img/09/09_push.png" alt="按第 1 次，推得动，箱子跟着走一格"><figcaption>按第 1 次，推得动，箱子跟着走一格</figcaption></figure>
+<p>再按一下。这回人前面还是箱子 A，可 A 要去的那格，蹲着箱子 B。</p>
+<p>箱子推箱子？谂多咗。呢一步作废晒，人同箱子都留喺原地。</p>
+<figure><img src="../img/09/09_compare.png" alt="按第 2 次，箱子后面还有箱子，纹丝不动"><figcaption>按第 2 次，箱子后面还有箱子，纹丝不动</figcaption></figure>
+<p>左右两张我比对过，像素级一模一样。按咗，冇动，咁就啱喇。</p>
+<p>「看两格」画出来是这样：</p>
+<figure><img src="../img/09/09_two_cells.png" alt="黄框人、绿框目标、红框箱子落点"><figcaption>黄框人、绿框目标、红框箱子落点</figcaption></figure>
+<p>黄框是人站的格，绿框是人要去的格，红框是箱子要去的那格。红框进不去，整个动作取消。</p>
+<h2>最后</h2>
+<p>今天其实就一句话：推箱子之前，要看的不是一格，是两格。人要去哪里，箱子要去哪里，两处都通得过才动。</p>
+<p>而家箱子推得动又推唔动喇，不过佢哋仲未知自己应该去边。下一篇帮箱子搵几个「家」——目标点，全部归位就算赢。</p>
+<p>箱子推得起喇，点赞 + 在看收好；关注「山岚的运维笔记」，下一篇帮箱子搵家。评论区吹水啦。</p>
+<p>（配套工程在 GitHub 的 Boxman 仓库 tutorial 分支，每篇一个进度 tag，随时能下到对应版本。）</p>
+</div></div></body></html>

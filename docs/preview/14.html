@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>关掉游戏再打开，又从第一关开始？存个档就搞掂</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 14 篇</span></div>
+<div class="card">
+<h1 class="title">关掉游戏再打开，又从第一关开始？存个档就搞掂</h1>
+<div class="meta"><b>摘要</b>　能一关一关往下推了，可关掉游戏再打开又从第一关开始。这篇把通关进度写进一个文件，七关里默认开放五关，后两关靠通关挣。顺带讲清存档文件到底落在硬盘哪里、第一次运行文件不存在怎么办。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>上一篇已经可以一关一关咁推落去。不过熄咗游戏再开返，又由第一关开始，通咗几关都冇人记得。</p>
+<p>今天把通关进度写进一个文件。七关里默认开放五关，后两关得靠通关挣。</p>
+<h2>存档放哪儿</h2>
+<p>先解决一个很实在的问题：文件写在哪里。</p>
+<p>你可能会想写到游戏资源目录。唔好谂，千祈唔好咁做。那个目录在导出之后是被打进包里的，只读，往里写要么写不进去，要么写完下次启动就没了。</p>
+<p>引擎给这类需求留了个专门的用户数据目录，不同系统落点不同。我这台 Windows 上，它在用户目录下面的 AppData 里。想自己确认，代码里打印一句就能看到真实路径，调试的时候很好使。</p>
+<h2>读写就三板斧</h2>
+<p>存这种小配置，引擎自带一个配置文件的类型，写出来的格式跟老式 ini 一模一样，看得懂也改得动。</p>
+<p>三个动作：读进来、取某一项、改完再写回去。第一节名随便起，自己分分类就行。</p>
+<h2>坑一：第一次运行，文件根本不存在</h2>
+<p>这个最容易漏。读取的时候找不到文件，它会返回一个错误码——我在自己机器上实测是 7。它不会帮你建一个空的，也不会返回默认值，它就那么返回了。</p>
+<p>你要是不判断，下一句取值拿到的就是个不知道是什么的东西。所以得先判错误码，不对就用默认值直接返回。</p>
+<h2>坑二：取值时别忘了兜底</h2>
+<p>取值的函数有个第三个参数，是兜底值：文件存在、但里面没有那一项时用它。什么时候会这样？你以后加咗新字段，老玩家嘅存档入面冇呢一项——冇呢个兜底值，老玩家一升级就即刻崩。</p>
+<h2>坑三：解锁数要夹一下</h2>
+<p>呢行睇落好似多余，其实救过我。总关卡数是会变的，你要是哪天删了两关，存档里还写着已解锁七关，第七关早没了，一进去就数组越界。</p>
+<p>我实测过：往文件里硬写一个 999，读回来被夹成 7，正好等于总关卡数。</p>
+<h2>通关就解锁，立刻写盘</h2>
+<p>解锁的逻辑就一句：通关第 N 关，把第 N+1 关放开。</p>
+<p>还有个细节：存档要立刻写，别攒着。我见过不少教程把存档放在退出回调里。听着合理，实际很脆——程序崩了、玩家直接关窗口、手机来电话切后台，这些情况下退出回调不一定跑得起来。玩家通了一关，下次发现没解锁，那是要骂人的。</p>
+<p>解锁这事儿一次也就几十字节，写就写了。</p>
+<p>关卡入口也得跟着收一下，没解锁的关卡不放行。门不锁死，解锁功能就是摆设。</p>
+<h2>跑起来</h2>
+<figure><img src="../img/14/14_lv1.png" alt="第 1 关开局，左上角显示已解锁 5 关"><figcaption>第 1 关开局，左上角显示已解锁 5 关</figcaption></figure>
+<p>连按几次 N 到第五关。再按一次 N——画面纹丝不动。我将前后两张截图做过像素比对，0 个像素唔同，第六关系真系被拦住咗。</p>
+<figure><img src="../img/14/14_locked.png" alt="第 5 关，再按 N 没反应"><figcaption>第 5 关，再按 N 没反应</figcaption></figure>
+<p>把第五关通了，面板上直接写明解锁了几关。</p>
+<figure><img src="../img/14/14_win5.png" alt="通关第 5 关"><figcaption>通关第 5 关</figcaption></figure>
+<p>这时候按 R 重开本关，跟通关前的画面比一比。</p>
+<figure><img src="../img/14/14_compare.png" alt="解锁前后对比"><figcaption>解锁前后对比</figcaption></figure>
+<p>整幅图只有 55 个像素不一样，全在左上角那个数字上，5 变 6。把左上角抠掉，游戏区是 0 个像素不同。呢个数字我几满意——说明解锁净系改咗佢应该改嘅嘢，冇掂过其他。</p>
+<figure><img src="../img/14/14_lv6.png" alt="解锁后进第 6 关"><figcaption>解锁后进第 6 关</figcaption></figure>
+<h2>存档文件里到底写了什么</h2>
+<p>它就在用户数据目录下，用记事本打开是这样：</p>
+<p>一个节名，一行 unlocked=6。</p>
+<p>就呢四行，一眼睇得明。这也是我选这个方案的原因：出问题的时候你能直接打开看，不用写个专门的读档调试工具。</p>
+<p>当然它有代价——玩家改这个文件就能全解锁。小游戏无所谓，要防的话得加校验或者存成二进制，那是另一回事了。</p>
+<figure><img src="../img/14/14_code.png" alt="脚本里的读档与写档"><figcaption>脚本里的读档与写档</figcaption></figure>
+<figure><img src="../img/14/14_editor.png" alt="场景树与运行界面"><figcaption>场景树与运行界面</figcaption></figure>
+<h2>最后</h2>
+<p>今天这个游戏第一次有了「记忆」。</p>
+<p>存档这事儿真正要操心的就三处：写到哪里、第一次没有文件怎么办、什么时候写。</p>
+<p>为什么默认是 5 关？这是我后来做完整版时定的数：两百多关全放出来，新手一进来就眼花，看着像劝退；只放一关，又显得抠门。5 关啱啱好够人摸清玩法，又唔会拣到眼花。</p>
+<p>而家进度存得住喇。不过玩家仲系只可以一关一关咁推，想返转头重打第三关，就要由头按 N。下一篇做选关界面，把所有关卡摆成按钮网格，锁着的挂把锁。</p>
+<p>进度存住喇，值得<strong>点赞、在看</strong>来一套；想睇选关界面点做嘅，<strong>关注「山岚的运维笔记」</strong>，下一篇接着。评论区有问必回。</p>
+</div></div></body></html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>改一关要动代码？把地图写成几行字就搞掂</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 12 篇</span></div>
+<div class="card">
+<h1 class="title">改一关要动代码？把地图写成几行字就搞掂</h1>
+<div class="meta"><b>摘要</b>　地图一直写死在代码里，改一格要动逻辑。这篇把它抽成一份纯文本，定一套符号，写个解析函数读进来。改关卡从此只是改几行字，代码一行不用动。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>前面十一篇，地图一直写死喺代码入面，玩家同箱子喺边都系我手填嘅坐标。想加一关，就要将嗰几个数组再抄一次，改个数仲要数格子。</p>
+<p>今天把地图抽成一份纯文本。改关卡从此只是改几行字，代码一行不用动。</p>
+<h2>先定一套符号</h2>
+<figure><img src="../img/12/12_symbols.png" alt="关卡文本与符号对照"><figcaption>关卡文本与符号对照</figcaption></figure>
+<p>符号一共七个，是推箱子社区通用的那套，网上现成的关卡文件直接能拿来用。</p>
+<p>有两点要留神。</p>
+<p>第一，地板是空格，不是点。我一开始顺手拿点号当地板，跟目标点抢了符号，解析出来一团乱。空格睇落别扭，不过佢最唔容易同其他字符打架。</p>
+<p>第二，一个字符能表达两件事。「箱子在目标点上」这个符号既是「这里有箱子」又是「这里是目标点」，玩家站在目标点上也是同理。这两个符号看着多余，其实省了大麻烦——不然你得再开一个数组，专门记哪个箱子开局就站在目标上。</p>
+<h2>解析：一个字符一个字符看</h2>
+<p>两层循环，外层走行、内层走列，看到什么字符就往对应的数组里塞。没有花哨的东西，就是老实遍历。</p>
+<figure><img src="../img/12/12_code.png" alt="脚本里的解析函数"><figcaption>脚本里的解析函数</figcaption></figure>
+<p>开头那两行清空很重要，是为了让这个函数能反复调用——重开一关就是重新解析一遍，不清空的话箱子会越攒越多。</p>
+<h2>墙不用单独存</h2>
+<p>墙我没解析成数组，判定的时候直接回文本里查。地图文本本身就是一份完整的地图数据，没必要再抄一份到别的数组里。</p>
+<p>多一份数据，就多一处对唔上嘅风险。</p>
+<h2>解析完，画面自己就出来了</h2>
+<figure><img src="../img/12/12_level.png" alt="解析出来的画面"><figcaption>解析出来的画面</figcaption></figure>
+<p>解析完，玩家喺边、箱子喺边、目标点喺边，全部有齐。剩低嘅就系将精灵摆到位、刷一次颜色、嗌一声重画。</p>
+<p>顺带说一个细节：箱子精灵我是事先在场景里摆好几个的，关卡里箱子少就把多余的藏起来。这叫对象池。关卡里箱子数量不定，总不能每次都现场创建节点，先备几个、用多少显多少，正经项目里基本都这么干。</p>
+<h2>跑起来</h2>
+<p>玩家在左上角，箱子一个在右边、一个已经站在目标点上（绿的）。</p>
+<p>按一次往右，箱子推进目标点，两个都满了，通关。</p>
+<figure><img src="../img/12/12_win.png" alt="按一次，箱子推进目标点，通关"><figcaption>按一次，箱子推进目标点，通关</figcaption></figure>
+<figure><img src="../img/12/12_compare.png" alt="按 R 重开，回到最初的样子"><figcaption>按 R 重开，回到最初的样子</figcaption></figure>
+<p>重开做的事就是再解析一遍关卡文本。重开后的画面跟开局那张，我比对过，像素级一模一样。说明解析系干净嘅，冇留低上一局嘅手尾。</p>
+<h2>最后：阶段小结</h2>
+<p>这一段四篇，我们干了这些事：推箱子要看两格；胜利是状态不是事件，每走一步都得重新问；撤销存状态不存动作，数组是引用记得复制；地图抽成文本，改关卡不动代码。</p>
+<p>现在这个游戏能推、能撤、能赢，关卡还是数据驱动的了。</p>
+<p>下一阶段把它做成一个「真的游戏」：多关卡、存档解锁、选关界面、主菜单。第一步是多关卡加载与切换——既然关卡已经是文本了，多备几份轮着读就是了。</p>
+<p>地图搬出代码喇，值得一个点赞同在看；关注「山岚的运维笔记」，关卡从此改文本就得。评论区见。</p>
+<p>（配套工程在 GitHub 的 Boxman 仓库 tutorial 分支，每篇一个进度 tag，随时能下到对应版本。）</p>
+</div></div></body></html>

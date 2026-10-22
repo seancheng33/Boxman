@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>写了二十篇，游戏终于能双击就玩了</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 21 篇</span></div>
+<div class="card">
+<h1 class="title">写了二十篇，游戏终于能双击就玩了</h1>
+<div class="meta"><b>摘要</b>　二十篇写下来，玩法存档选关主菜单多语言都齐了，可游戏一直活在编辑器里。这篇把它变成双击就能玩的 exe：装导出模板、写导出预设、命令行一行打包，顺带把上一篇便携存档的伏笔在真实导出环境里兑现。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>上一篇我把存档搬到了 exe 同级目录，留了个小坑：编辑器里跑永远是回退模式，要看到便携模式生效，得先有一个导出来的 exe。</p>
+<p>嗰个 exe，今日就嚟。</p>
+<h2>导出到底导出了什么</h2>
+<p>先说清楚一件事：导出不是"把工程变成一个文件"，是产出<strong>两样东西</strong>——一个引擎运行时（exe），一个资源包（pck）。你的场景、脚本、贴图、翻译，全被打包压进 pck；玩家双击 exe，引擎读 pck，跑你的主场景。</p>
+<p>呢个模型可以解释后面所有现象，搞掂咗呢层，后面就顺。为什么 exe 拷到别人电脑也能跑（引擎自带），为什么改了代码得重导（pck 里存的是打包那刻的快照），为什么 exe 单独拷走跑不起来（资源还在 pck 里躺着）。</p>
+<figure><img src="../img/21/21_notpl.png" alt="没装模板就导出的真实报错"><figcaption>没装模板就导出的真实报错</figcaption></figure>
+<h2>第一个坑：导出模板根本没装</h2>
+<p>新手第一次导出，十个有九个都死喺呢度。菜单点导出、命令行敲命令，得到的都是同一句——"目标路径找不到导出模板"。</p>
+<p>不是工程坏了，是<strong>导出模板压根没装</strong>。这东西每个 Godot 版本自带一套"出厂运行时"，官方按版本发布，<strong>不随编辑器一起装</strong>。去官网下载页找跟你编辑器一模一样的版本号（差一个小版本都不行），下那个几百兆的 tpz 压缩包。</p>
+<p>它不需要安装程序，本身就是压缩包，解压出来的 templates 文件夹改名成版本号，丢到引擎数据目录下，马上就能认得。这一步每个版本只做一次，以后所有同版本工程直接导。</p>
+<p>嫌全量大也行，Windows 平台实际只要两个文件（debug 和 release 各一个），但说实话，全量解压省心。</p>
+<figure><img src="../img/21/21_code.png" alt="export_presets.cfg 全貌"><figcaption>export_presets.cfg 全貌</figcaption></figure>
+<h2>导出预设：一次配置，反复使用</h2>
+<p>模板是引擎侧的，预设是工程侧的。项目里那个 export_presets.cfg 文件，编辑器里点"项目 → 导出 → 添加 Windows Desktop"会自动生成，我是直接手写的，关键的就那么几行。</p>
+<p>`export_filter="all_resources"` 表示资源全打包，不想带某些文件就往 exclude 里扔，支持通配符——比如你项目里躺着 psd 源文件，导出去纯属浪费体积，实在没必要。</p>
+<p>`export_path` 是产物落点。我指到仓库根的 export_test 目录，这目录进了 gitignore——导出产物不进版本库，跟构建产物一个待遇。</p>
+<p>`binary_format/embed_pck=false` 是个选择题：false 产出 exe 加 pck 两个文件，改一个字只要重导 pck；true 把 pck 塞进 exe，单文件分发最爽，但每次改动都要重导整个 exe。开发期用 false，正式发布图省事再切 true。</p>
+<figure><img src="../img/21/21_export.png" alt="命令行导出全程输出"><figcaption>命令行导出全程输出</figcaption></figure>
+<h2>一行命令的事</h2>
+<p>预设配好，导出就一条命令：</p>
+<p>Godot4.exe --headless --path tutorial --export-release "Windows Desktop" ../export_test/game.exe</p>
+<p>四个部件拆开看：headless 不开窗口纯后台跑，path 指工程目录，export-release 是命令本体，后面跟着<strong>预设名</strong>——就是配置文件里 name 那个字符串，一字不差——最后是输出路径。</p>
+<p>这里有个历史包袱值得记一笔：Godot 3 时代这个参数叫 `--export`，4 改成 `--export-release`。我正式版系 3.5 做嘅，切 4.2 嗰阵第一把就顺手写错咗。</p>
+<p>好在 4.x 遇到唔识嘅参数会直接报错退出，唔似 3.x 咁静静鸡忽略——将游戏当编辑器跑起身空转，你对住一个根本唔存在嘅 exe 等半日，嗰种绝望我而家都记得。参数名跟版本对不上，先查文档再硬试。</p>
+<figure><img src="../img/21/21_files.png" alt="产物就俩文件，exe 和 pck"><figcaption>产物就俩文件，exe 和 pck</figcaption></figure>
+<h2>双击验证</h2>
+<p>拷去边个目录双击，主菜单就出嚟喇。主菜单、选关、游戏本体，跟编辑器里跑的一模一样。</p>
+<p>这一步其实验证了两件事：模板跟引擎版本严丝合缝；pck 把工程打全了——少一个资源，进对应场景就黑屏报错。</p>
+<figure><img src="../img/21/21_run.png" alt="导出版跑起来了"><figcaption>导出版跑起来了</figcaption></figure>
+<h2>回收上一篇的伏笔</h2>
+<p>第 20 篇说过，便携模式要导出的 exe 才能走到第三关。现在兑现：把主场景临时换成存档演示页，再导一版，双击，点写入。</p>
+<figure><img src="../img/21/21_portable.png" alt="便携模式生效，存档落在 exe 旁边"><figcaption>便携模式生效，存档落在 exe 旁边</figcaption></figure>
+<p>看路径栏，"回退模式"变成了<strong>便携模式</strong>，存档就在 exe 同级目录。整个文件夹拷到 U 盘，进度跟着走。上一篇嗰三道关卡，喺真实导出环境里全部走通晒。</p>
+<p>验证完把主场景换回主菜单，重新导出正式版。两次导出加起来唔够两分钟，呢啲就系预设配好嘅红利。</p>
+<figure><img src="../img/21/21_editor.png" alt="编辑器里的导出对话框"><figcaption>编辑器里的导出对话框</figcaption></figure>
+<h2>最后</h2>
+<p>这一篇的关键词：<strong>导出模板、export_presets.cfg、export-release</strong>。</p>
+<p>模板是引擎侧的一次性投资，预设是工程侧的一次性配置，之后每次发布就是一行命令。游戏终于从编辑器里走咗出嚟，双击就玩得。</p>
+<p>但桌面只是第一站。下一篇导出网页版——浏览器里玩推箱子，而且网页版的存档跟桌面完全不是一套逻辑，上一篇回退模式的另一半原因在那边等着呢。</p>
+<p>游戏变成 exe 喇，值得<strong>点赞、在看</strong>嚟一套；想睇佢喺浏览器里跑起身嘅，<strong>关注「山岚的运维笔记」</strong>，下一篇接着。评论区有问必回。</p>
+</div></div></body></html>

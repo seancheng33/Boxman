@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>小人钉在原地不动？键位没绑，按破键盘也白搭</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 07 篇</span></div>
+<div class="card">
+<h1 class="title">小人钉在原地不动？键位没绑，按破键盘也白搭</h1>
+<div class="meta"><b>摘要</b>　坐标搞明白了，小人却还是钉在原地。这篇给它接上键盘——四个动作、每个绑两个键，按一下走一格，绝不连滚。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>上一篇将坐标搞明白咗，但嗰个小子仲系个钉子户，钉喺 (96,64) 郁都唔郁。呢回畀佢接上键盘。</p>
+<p>顺便把一个新手最常犯的毛病当场堵掉：按住不放，人物一路跑飞。</p>
+<h2>先别急着写代码</h2>
+<p>新手容易犯一个毛病，一上手就在脚本里写「如果按了 W 键，就往上一格」。能跑，真的能跑。</p>
+<p>但这条路走不远。等你要加手柄、要加方向键、要做键位设置界面，满屏的键名就得一个个改，改漏一个就是一个 bug。更麻烦嘅系——第日玩家话「我想用左手玩」，你只好干笑。</p>
+<p>Godot 的解法叫<strong>输入动作</strong>。你别问「按下 W 这个键」，「玩家想往上走」这件才算一件事。键是键，事是事，中间那层翻译交给输入映射。</p>
+<p>打开项目设置，切到「输入映射」：</p>
+<figure><img src="../img/07/07_inputmap.png" alt="项目设置里的「输入映射」面板"><figcaption>项目设置里的「输入映射」面板</figcaption></figure>
+<p>左边一列是动作名，右边是给它绑的键。翻译过来就是：不管玩家按了哪个键，只要它属于 move_up，游戏收到的都只有一句「他要往上走」。</p>
+<h2>四个动作，八条绑定</h2>
+<p>推箱子只要四个方向，所以我建了四个动作：move_up、move_down、move_left、move_right。</p>
+<p>添加不复杂。在「添加新动作」的框里敲名字，回车，动作就有了。然后点它右边那个加号，弹出一个等按键的窗，这时候你按下 W，它自己就记上了。</p>
+<p>每个动作我都绑了两个键，WASD 一套、方向键一套：</p>
+<figure><img src="../img/07/07_actions.png" alt="四个动作，每个都绑了两个键"><figcaption>四个动作，每个都绑了两个键</figcaption></figure>
+<p>为什么非要绑两套？因为我这双手写代码时离不开 WASD，可坐在沙发上的时候又只想按方向键。多绑一个又唔使钱，点解唔绑。</p>
+<p>顺便说那个<strong>死区</strong>。它是给摇杆用的——摇杆不像按键，只有 0 和 1，它能到 0.37 这种中间值。死区就是「推得不够狠，当没推」的门槛。键鼠用不上，留着 0 就对了。</p>
+<p>说个坑。我一开始没走面板，直接去改工程配置文件，照着老习惯写了两段重复的段头。Godot 一声不吭地把它们全忽略了，面板空空如也，我还以为引擎坏了。后来才明白，那得写成字典格式。白折腾半天——所以你要是也用命令行改配置，记住它有它自己的规矩。</p>
+<h2>接住按键</h2>
+<p>配好了，回到脚本。开一个 _unhandled_input，里面就是四个判断，每个判断给一个方向。</p>
+<p>有个细节别搞反：判断的时候传的是<strong>动作名</strong>，不是键名。哪天玩家想把上键改成 I，你一行代码都不用动，去面板上换个绑定就完事。这就是前面那层翻译的回报。</p>
+<p>还有个负号。上一篇说过 Y 轴朝下，所以「往上」是<strong>减</strong> y。我第一次写嗰阵顺手写咗正一，结果按上键人物往下窜，呆咗三秒。</p>
+<h2>差一个 just，差很多</h2>
+<p>这是今天最值钱的一句话。</p>
+<p>写在 _unhandled_input 里的 event.is_action_pressed，只在你刚按下那一瞬间那个事件上返回 true。按住不放，系统不会一直塞新事件给你。所以——按一下，走一格。</p>
+<p>要是你图省事，在 _process 里轮询「有没有按下」，那就有意思了。_process 一秒钟跑六十次，你手指按住半秒，它就给你走三十格。呢个唔系推箱子，呢个系弹射起步。</p>
+<p>正确的轮询写法，函数名里多带一个 just：is_action_just_pressed。它是「这一帧刚按下」，而且一帧只成立一次。名字里多这一个词，性质就完全不同。</p>
+<p>我建议你两个都写一遍，亲手按住不放感受一下，比看十篇文章有用。</p>
+<h2>让它一格一格挪</h2>
+<p>这里有个坑得先讲，不然你照着写完会一脸问号。格子号只是我们自己记的一个数，小人真正站哪里，看的是它自己的 position 属性，这俩不是一回事。你只将格子号加一、唔去动 position，结果就系黄框一格一格跑得欢，小人喺原地纹丝不动——我第一次就系咁呆咗喺度。</p>
+<p>所以算完格子，还得把像素位置写回去。直接赋值能走，但是瞬间到位，硬跳看着像掉帧；改用补间（Tween）把这段位移摊到 0.12 秒就顺眼了，够短，不拖沓；又不是零，眼睛跟得上。</p>
+<p>跑起来，初始在 cell(3,2)：</p>
+<figure><img src="../img/07/07_run.png" alt="运行起来，小人站在 cell(3,2)"><figcaption>运行起来，小人站在 cell(3,2)</figcaption></figure>
+<p>然后我连按四次 S：</p>
+<figure><img src="../img/07/07_compare.png" alt="按四次 S，一格一格挪到 cell(3,6)"><figcaption>按四次 S，一格一格挪到 cell(3,6)</figcaption></figure>
+<p>一格，一格，一格，一格。中间冇溜冰，都冇越过格子。呢个就系我要嘅手感。</p>
+<p>编辑器里那个 Player 的位置，也就跟着跑到 (96,192) 去：</p>
+<figure><img src="../img/07/07_editor.png" alt="编辑器里选中 Player，检查器显示位置"><figcaption>编辑器里选中 Player，检查器显示位置</figcaption></figure>
+<h2>还差一块：它现在能穿墙</h2>
+<p>能动了，但小人而家系个会穿墙嘅。往左按十下，佢就从画面左边消失咗。</p>
+<p>下一篇给它加上地图和边界，让它知道哪里能走、哪里不能走。</p>
+<h2>最后</h2>
+<p>今天三件事。动作名要和键名分开，配在输入映射里。接收按键用 _unhandled_input 配 event.is_action_pressed。想轮询就用 is_action_just_pressed，别用没 just 的那个。</p>
+<p>键盘管住小人喇，点赞、在看来一套；想跟完全程嘅，关注「山岚的运维笔记」。评论区吹水，有问必回。</p>
+<p>下一篇见。</p>
+<p>（配套工程在 GitHub 的 Boxman 仓库 tutorial 分支，每篇一个进度 tag，搜 seancheng33/Boxman 就能找到。）</p>
+</div></div></body></html>

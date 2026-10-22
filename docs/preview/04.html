@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>写下人生第一段 GDScript，节点开始听我的了</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 04 篇</span></div>
+<div class="card">
+<h1 class="title">写下人生第一段 GDScript，节点开始听我的了</h1>
+<div class="meta"><b>摘要</b>　给 Label 挂上第一个脚本，认识变量、函数和 print，游戏窗口里的字从此由代码说了算。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>讲返段我嘅黑历史先。当年学引擎，我一直觉得"检查器里能改的，代码纯属多余"，鼠标杆啥都能干。直到想做一个"每秒自己变颜色的方块"才明白：鼠标点再多，也只能设一个静态值。</p>
+<h2>能跟着时间变、跟着玩家变的，只有代码。</h2>
+<p>前几篇全部系点鼠标，今日代码正式上场。目标就一个：畀节点听代码嘅话。</p>
+<h2>给 Label 挂个脚本</h2>
+<p>还是老朋友 first_scene：Node2D 底下一个 Label。</p>
+<p>选中 Label，右键选「附加脚本」，路径保持默认 res://label.gd，点创建。场景树里 Label 后面多了个小图标——"这个节点有脚本了"：</p>
+<figure><img src="../img/04/04_scene_with_script.png" alt="场景树中 Label 挂上脚本"><figcaption>场景树中 Label 挂上脚本</figcaption></figure>
+<p>同时编辑器自动切到 Script 工作区，打开 label.gd。</p>
+<p>小知识：脚本后缀 .gd，纯文本，跟场景文件 .tscn 一样住在项目文件夹。</p>
+<h2>读懂模板，然后整个换掉</h2>
+<p>新脚本自带几行模板，第一次睇落真系几吓人。别慌，整个换成下面这段，一共 12 行：</p>
+<figure><img src="../img/04/04_script_editor.png" alt="脚本编辑器与完整代码"><figcaption>脚本编辑器与完整代码</figcaption></figure>
+<pre><code>extends Label
+
+# 变量：先把要用的字存起来
+var greeting = "这行字是代码改的！"
+
+# _ready：节点进场时引擎会自动调用的函数
+func _ready():
+	# 改文字：跟在检查器里填 Text 效果一样
+	text = greeting
+	# print：把消息打到编辑器的输出面板
+	print("脚本跑起来了！")</code></pre>
+<p>逐行拆：</p>
+<p>extends Label：声明"这脚本是给 Label 用的"，这样才能直接用 Label 的东西。</p>
+<p>var greeting = "..."：定义一个<strong>变量</strong>——贴了名的存储空间，把字存进去随取随用。</p>
+<p>func _ready():：定义<strong>函数</strong>。_ready 是 Godot 约定好的特殊函数，<strong>节点一进场，引擎自动调用</strong>，不用你喊。</p>
+<p>text = greeting：把变量赋给 Label 的 text 属性，等价于在检查器填 Text。</p>
+<p>print("...")：往编辑器<strong>输出面板</strong>打消息，调试神器，以后天天见。</p>
+<p>缩进用 Tab，GDScript 靠缩进认代码块，跟 Python 一个脾气，缩错就报错，手要稳。</p>
+<h2>跑起来：两处证据</h2>
+<p><strong>Ctrl+S</strong> 存脚本（脚本都要存档！忘存就跑旧代码，经典陷阱），按 <strong>F5</strong>。</p>
+<p>证据一，编辑器底部输出面板：</p>
+<figure><img src="../img/04/04_output_panel.png" alt="输出面板显示 print 结果"><figcaption>输出面板显示 print 结果</figcaption></figure>
+<p>「脚本跑起来了！」——呢句系 print 干嘅活。游戏一启动，_ready 就自己跑。</p>
+<p>证据二，游戏窗口本身：</p>
+<figure><img src="../img/04/04_hello_code_window.png" alt="游戏窗口显示代码改的文字"><figcaption>游戏窗口显示代码改的文字</figcaption></figure>
+<p>左上角从 Hello, Godot! 变成了「这行字是代码改的！」——检查器填的 Text 被 _ready 里的代码覆盖了。<strong>谁后说话听谁的</strong>：先读检查器的值，再跑你的代码。</p>
+<p>到呢步，你已经识"用代码改节点"喇。所有游戏逻辑——移动、计分、敌人 AI——都系从呢个口子长出嚟嘅。</p>
+<h2>最后</h2>
+<p>今日识咗三个朋友：<strong>变量</strong>（存东西嘅盒）、<strong>函数</strong>（打包好嘅动作）、<strong>print</strong>（探照灯）。外加一个关键认知：_ready 只在进场时跑一次。</p>
+<p>咁想让代码<strong>每一帧都跑</strong>（让文字转圈、方块自己行）点算？_ready 唔够用。</p>
+<p>下一篇：《Godot 入门实战 05：精灵与素材》，先给场景添置"能看见的东西"。</p>
+<p>人生第一段 GDScript 写完喇，抵一个点赞同在看；想跟埋全程嘅，关注「山岚的运维笔记」。有问必回。</p>
+<p>下一篇见。</p>
+<p>（配套工程在 GitHub 的 Boxman 仓库 tutorial 分支，每篇一个进度 tag。）</p>
+</div></div></body></html>

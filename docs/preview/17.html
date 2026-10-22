@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>不改一行逻辑，画面从程序员灰变成能见人</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 17 篇</span></div>
+<div class="card">
+<h1 class="title">不改一行逻辑，画面从程序员灰变成能见人</h1>
+<div class="meta"><b>摘要</b>　功能齐了，画面还灰扑扑的。这篇不改逻辑只收拾门面：颜色收进一个 const 字典调色板，改一处全局变；锁图标用代码逐像素画，不请美术、不占资源。顺带讲一个"有时候点得动有时候点不动"的灵异问题的真凶。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>功能到上一篇就齐晒喇：玩得、存得、选得关。可画面还是那个灰扑扑的程序员配色，锁着的关卡也光靠"变灰"撑着。</p>
+<p>呢一篇唔改任何逻辑，净系收拾门面——调色板，同一把用代码画出嚟嘅锁。</p>
+<h2>散落的颜色是种债</h2>
+<p>先盘点我自己的债。</p>
+<p>画地图那篇，墙色写了一个 Color(0.34, 0.34, 0.46)；箱子染绿那篇，又写了一个绿色；预览小地图那篇，墙色再抄一遍。同一个"墙"，两个文件里各存一份——哪天想把墙调成暖棕，就得满项目搜色号，漏一处就阴阳脸。</p>
+<p>呢个就系散落嘅魔法数字，颜色版嘅重复代码。治法和治重复代码一样：收拢到一处，起个名字。</p>
+<h2>调色板：一个 const 字典管全部</h2>
+<p>做法简单到不好意思写：一个 const 字典，十一个颜色，每个都按"这东西是什么"起名——底色、面板、墙、目标点、玩家、箱子、进目标的箱子、正文文字、暗淡文字、锁。</p>
+<p>以后画任何东西，从字典里按名取色。控件文字的颜色用主题覆盖一个一个挂上去，正常态一个色，禁用态单独一个更暗的——灰按钮上那个"暗一档"的感觉就是这么来的。</p>
+<p>这套调色板值不值，看换主题的速度：</p>
+<figure><img src="../img/17/17_theme.png" alt="同一份代码两套配色，左边冷色夜、右边暖棕沙"><figcaption>同一份代码两套配色，左边冷色夜、右边暖棕沙</figcaption></figure>
+<p>代码零改动，就换了字典里几个数。要是颜色散在各个文件里，这次换肤就是一次全项目大扫除。</p>
+<h2>程序化锁图标：代码逐像素画</h2>
+<p>未解锁嘅按钮净系变灰仲未够——玩家扫一眼都睇唔出边个点得。挂返把锁，一眼就明。</p>
+<p>图片素材去边度搵？唔搵喇，用代码画。十二乘十四像素，两根竖梁加一条顶横拼出锁梁，填一个实心矩形当锁身，最后在锁身中间写四个全透明像素，把锁孔"挖"出来——带透明通道的格式里，写一个透明度为零的颜色就是把那个点抠穿。</p>
+<p>整个过程零资源文件：不用找美术、不用管图片格式、导出时也不多一个字节。像这种十几个像素的小图标，代码画比找素材还快。</p>
+<h2>挂锁的四个讲究</h2>
+<p>图标往按钮右上角一挂，有四个细节，个个都踩过：</p>
+<p>一是挂之前先查——刷新逻辑每次都跑，不先查有没有挂过，翻一页页就多长一把锁，最后按钮上长出一把锁的刷子。</p>
+<p>二是解锁要摘锁——解锁不只是"按钮不禁用"这一个状态，挂件也要跟着删。第 15 篇说"按钮是死的，状态是活的"，锁就是状态的一部分。</p>
+<p>三是锚点定位——把图标钉在按钮右边缘，再用偏移往回收一点、往上挑一点，让锁"骑"在按钮角上。按钮怎么变，锁都跟着右上角走。</p>
+<p>四是鼠标穿透——这个最阴险：锁压在按钮上，它自己要是吃鼠标事件，点在锁上的那一小块就点不到按钮。玩家会遇上"有时候点得动有时候点不动"的灵异问题，排查起来能把人逼疯。把图标设成忽略鼠标，事件穿过去，按钮的点击才完整。</p>
+<figure><img src="../img/17/17_lock.png" alt="解锁前，第 6 关右上角挑出小红锁"><figcaption>解锁前，第 6 关右上角挑出小红锁</figcaption></figure>
+<figure><img src="../img/17/17_unlock.png" alt="按 N 解锁，锁即刻摘掉"><figcaption>按 N 解锁，锁即刻摘掉</figcaption></figure>
+<h2>预览也用同一块调色板</h2>
+<p>预览小地图顺手全部改成调色板取色。字典里我还备了一个颜色：箱子已经在目标点上的。虽然而家呢几关数据入面仲未用到呢种静态摆法，但颜色先备好、分支先写上，第日要用即刻用得。</p>
+<p>这就是调色板的另一个好处：颜色的"词汇表"先于内容存在。画新东西先想"这在语义上是什么"，从表里挑名字，而不是临时又捏一个色号。</p>
+<h2>最后</h2>
+<p>这一篇其实就干了一件事：把"长什么样"从代码里抽出来，集中管理。</p>
+<p>调色板系颜色嘅集中，锁图标系素材嘅集中。到呢一步，游戏应该有嘅皮都有齐喇。</p>
+<p>不过现在打开游戏直接就是选关，少个正经的"开始"。下一篇做主菜单：标题画面、开始按钮、场景切换，把游戏串成完整的"打开→开玩→回来"。</p>
+<p>视觉收拾完喇，值得<strong>点赞、在看</strong>来一套；想同游戏加返个正经大门嘅，<strong>关注「山岚的运维笔记」</strong>，下一篇接着。评论区有问必回。</p>
+</div></div></body></html>

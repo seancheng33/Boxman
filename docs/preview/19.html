@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>游戏界面会说话了：中英一键切换，重启不忘</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 19 篇</span></div>
+<div class="card">
+<h1 class="title">游戏界面会说话了：中英一键切换，重启不忘</h1>
+<div class="meta"><b>摘要</b>　发布前的第一件事不是打包，是字。这篇用代码把两套词条灌进引擎的翻译服务，取字走 tr()，切换一句 set_locale。当场演示两个真坑：改完语言字不自动变；漏刷一个控件就是灵异现场。语言选择写进存档，重启还是玩家的选择。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>入到发布阶段，第一件事唔系打包，系字。界面上嘅字要中英都切得，重启之后仲要记得住。</p>
+<h2>翻译的本质是查表</h2>
+<p>把"开始游戏"变成"Start Game"，本质就是查表：一个 key 对应两份文字，当前语言是英文就取英文那份。</p>
+<p>引擎把这套查表做成了公共服务：往里登记两本字典，一本中文一本英文，取字的时候用 tr()，它按当前语言自动翻。你只管畀 key，拣边本字典系佢嘅事，完全唔使你操心。</p>
+<h2>代码灌词条，零资源文件</h2>
+<p>官方正统做法是维护一份 CSV 表格，导入时自动生成翻译资源。词条多了就该这么干。但演示只有六条，直接用代码灌更轻：建一本字典，声明自己是中文，一条条加；再建一本英文的；两本都登记进查表服务。</p>
+<p>三个细节：key 用大写英文，因为它要在代码里到处写，写成中文等于把中文焊死在代码里；切语言按钮的文案是反的——中文界面显示 English，它不是翻译，是路标；英文字典漏登记的词，界面上会直接把 key 吐出来——别嫌丑，漏词当场现形，比悄悄显示中文强。</p>
+<h2>本篇最大的坑：tr 是"那一刻"的翻译</h2>
+<p>控件上的字用 tr() 取，但 tr() 不是永久绑定，是取值那一刻查一次表。取完之后你切语言、字典翻了天，控件上的字都不会动。</p>
+<p>所以切换语言必须两步：改当前语言，然后把所有字重新取一遍。</p>
+<p>我第一次跑就栽喺呢度：切完英文，按钮全部变咗，底部嗰行提示语仲系中文——刷新列表漏咗佢。</p>
+<figure><img src="../img/19/19_zh.png" alt="中文界面"><figcaption>中文界面</figcaption></figure>
+<figure><img src="../img/19/19_en.png" alt="英文界面，整屏六处字全变，连提示语都没漏"><figcaption>英文界面，整屏六处字全变，连提示语都没漏</figcaption></figure>
+<p>多语言界面嘅灵异问题九成都系呢个：改咗语言唔记得刷控件。边个字唔听话，就去刷新函数度搵佢——多半压根冇登记，即刻补上就搞掂。</p>
+<h2>选择要记住：写进存档</h2>
+<p>玩家拣咗英文，总唔可以次次开机都重新拣。老朋友 ConfigFile 再出场：往存档里新开一节存语言，进度归进度、偏好归偏好，一个文件分节管理。</p>
+<p>兜底值这次格外重要：老玩家的存档里根本没有语言这一节，不写兜底值，一升级就拿到空值。经典兼容性坑，换件马甲又嚟过。</p>
+<figure><img src="../img/19/19_again.png" alt="切英文、退出、重进——开屏就是 Boxman，存档里明明白白一行"><figcaption>切英文、退出、重进——开屏就是 Boxman，存档里明明白白一行</figcaption></figure>
+<h2>扩大战线之前</h2>
+<p>真要翻译整个游戏，工作量在"换字"不在"翻译"。三个建议：别用拼接组句子，整句做成带占位符的词条，语序让翻译的人自己定；按钮宽度留余量，中文两个字的地方英文可能一行；词条超过几十条就老实换 CSV，代码灌字典写到第三十行就知道疼了。</p>
+<h2>最后</h2>
+<p>关键词：翻译服务、tr()、set_locale。代码灌词条省了流水线，切换的坑在明处，语言偏好进存档。到呢一步，界面上嘅字有资格上货架喇。</p>
+<p>下一篇解决另一个上架硬门槛：存档位置。现在进度藏在玩家系统的犄角旮旯，想备份都没处找——第 20 篇把它挪到 exe 旁边，跟游戏形影不离。</p>
+<p>界面识讲话喇，值得<strong>点赞、在看</strong>来一套；想睇游戏练成可执行文件嘅，<strong>关注「山岚的运维笔记」</strong>，下一篇接着。评论区有问必回。</p>
+</div></div></body></html>

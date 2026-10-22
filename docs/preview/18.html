@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>打开游戏直接是选关？你的游戏缺一个大门</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 18 篇</span></div>
+<div class="card">
+<h1 class="title">打开游戏直接是选关？你的游戏缺一个大门</h1>
+<div class="meta"><b>摘要</b>　主菜单：开始/继续/退出，场景切换一行代码，Esc 杀回来，游戏入口换成主菜单。顺带交代一个 _ready 里切场景的坑。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>而家打开游戏直接系选关界面，好似一本书一揭就揭到中页。玩家需要一个大门：开始、继续、退出。</p>
+<p>呢一篇将散落嘅场景串成流程——由呢刻开始，双击运行，先见大门，再见房间。</p>
+<h2>流程长什么样</h2>
+<p>两个场景两条路：主菜单是家，选关是房间。进门可以走去房间，房间按 Esc 也能回家。切换系双向嘅，净系教单程嘅教程都系半桶水。</p>
+<h2>主菜单：看档下菜</h2>
+<p>场景结构没有新东西，全屏 Control 加一串标签按钮。真正的主角是进场那一刻的逻辑：</p>
+<p>读一下存档——读到了、解锁数比默认多，才配谈"继续"，而且按钮文字不是干巴巴的"继续"，是"继续（已解锁 6 关）"，数字从存档里来；没进度呢？按钮直接藏起来，焦点交给"开始"。</p>
+<p>没有进度时给玩家看一个点了没反应的"继续"，比不显示还难受。</p>
+<figure><img src="../img/18/18_menu.png" alt="有存档的主菜单，"继续（已解锁 6 关）"带着焦点白框"><figcaption>有存档的主菜单，"继续（已解锁 6 关）"带着焦点白框</figcaption></figure>
+<p>将存档删咗再跑一次，个按钮真系冇咗：</p>
+<figure><img src="../img/18/18_nocont.png" alt="删档后只剩开始和退出，焦点回到开始"><figcaption>删档后只剩开始和退出，焦点回到开始</figcaption></figure>
+<h2>切换就一行</h2>
+<p>场景切换就一行代码：拿到场景树，调用换场景的方法，传入目标场景的路径。</p>
+<p>它做了三件事：加载新场景、把旧场景整个释放、把新场景设为当前。旧的节点连同脚本一起被释放，内存不背旧包袱。这也是为什么切换之后再也拿不到旧场景的引用——它不是"不存在"，是"连坟都没了"。</p>
+<p>有个我踩过嘅坑要交代：唔好喺场景自己嘅初始化函数入面直接切场景。场景树正忙着装配当前场景，这时候要求换场景，轻则警告重则出错。真要切，用延迟调用推到帧尾。按钮回调里调用没这个问题——那时场景早就装配完了。</p>
+<h2>Esc 回家</h2>
+<p>选关那边加一个分支：按 Esc 回主菜单。这个按键不用自己去设置里加，引擎内置了取消动作，默认就绑着 Esc。方向键挪焦点系白送嘅，Esc 都系——呢个引擎对键盘党真系好。</p>
+<figure><img src="../img/18/18_flow.png" alt="按空格进了选关，左上角"已解锁 6 / 7 关""><figcaption>按空格进了选关，左上角"已解锁 6 / 7 关"</figcaption></figure>
+<p>实测整条链路：主菜单按空格进选关，选关读的档和主菜单读的是同一份，第 6 关的按钮是亮的——流程是真的通了，不是两个各自为政的页面。再按 Esc 返屋企，同出发前嗰个画面一个像素都唔差：每次入主菜单都系全新初始化，读档、摆按钮、畀焦点，一步都唔少。</p>
+<h2>把大门装成正门</h2>
+<p>最后一步：游戏入口还指着第一篇那个测试场景呢。项目设置里把主场景改成主菜单，落到配置文件里就一行。</p>
+<p>改完按 F5，出来的就是主菜单。主场景决定双击运行后第一个加载的场景，它是游戏的正门。</p>
+<p>仲有笔账要记住：主菜单读档、选关都读档，路径同默认值两个常量喺两个文件各写咗一份。两三个场景时复制还行，等选项菜单、成就页都要读档，就该搬进一个公共脚本了——那是 Autoload 的活。</p>
+<h2>最后</h2>
+<p>这一篇的关键词：场景切换、内置取消动作、主场景设置。</p>
+<p>三行切换代码，流程就闭环喇：打开见门，入门见关，Esc 返屋企。到此为止，阶段三"做成完整游戏"全部完工——玩法、存档、选关、门面、流程，一个不少。</p>
+<p>下一篇开始阶段四"发布"：先把界面的字变成能切换的中英文，再谈导出。系列最难嘅其实唔系代码，系导出嗰几篇嘅坑，到时见真章。</p>
+<p>流程闭环喇，<strong>点赞、在看</strong>嚟一套；想睇呢个游戏点样走到发布嘅，<strong>关注「山岚的运维笔记」</strong>，下一篇接着。评论区有问必回。</p>
+</div></div></body></html>

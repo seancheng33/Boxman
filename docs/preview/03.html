@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>按下 F5 那一刻，我的第一个游戏窗口弹出来了</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 03 篇</span></div>
+<div class="card">
+<h1 class="title">按下 F5 那一刻，我的第一个游戏窗口弹出来了</h1>
+<div class="meta"><b>摘要</b>　主场景是什么？第一次运行必弹的提示框怎么选？这篇带你按下 F5，让 Hello, Godot! 真正出现在游戏窗口里。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>说个真事。我第一次装好引擎、建好场景、存完档，跟住对住编辑器呆咗半日：然后呢？游戏呢？</p>
+<p>答案是一个键：<strong>F5</strong>。</p>
+<p>但这一按，新手会撞上第一个弹窗。今天就把这一按掰开讲透。</p>
+<h2>主场景是个啥</h2>
+<p>先想一个问题：你项目以后会有几十个场景——主菜单、十个关卡、设置页……按 F5 运行时，引擎应该先开哪个？</p>
+<p>总要有默认入口吧。这个入口就叫<strong>主场景</strong>：游戏启动时第一个加载的场景。</p>
+<p>Godot 唔会帮你估。你唔出声，佢就问你。</p>
+<h2>第一次按 F5</h2>
+<p>直接按 <strong>F5</strong>，或者点编辑器右上角的播放键。因为还没设主场景，Godot 弹出一个确认框：</p>
+<figure><img src="../img/03/03_f5_dialog.png" alt="首次运行的未定义主场景提示"><figcaption>首次运行的未定义主场景提示</figcaption></figure>
+<p>「尚未定义主场景，是否选择一个？」——选它，就是把当前打开的场景登记为主场景。我们只有 first_scene.tscn，选它正合适。</p>
+<p>确认之后，一个独立游戏窗口「啪」地弹出来：</p>
+<figure><img src="../img/03/03_empty_window.png" alt="空白游戏窗口"><figcaption>空白游戏窗口</figcaption></figure>
+<p>标题是 tutorial (DEBUG)——DEBUG 意思是开发时的试运行版，正式导出就没这个尾巴了。</p>
+<p>窗口里面嘛……一片灰。系啊，我哋除咗一个空 Node2D 乜都冇。但注意：<strong>这个窗口是一个真的、在运行的程序</strong>，不是截图不是预览。你以后写的每行逻辑，都会活在这个窗口里。</p>
+<p>关掉它（点右上角 ×）回编辑器，主场景已经登记好——再按 F5 不弹窗，直接跑。</p>
+<h2>给窗口添点嘢</h2>
+<p>空窗口有点凄凉，加句字吧。</p>
+<p>按 <strong>Ctrl+A</strong>（或者点场景面板的「+」），弹出创建节点对话框，搜 Label，回车：</p>
+<figure><img src="../img/03/03_label_search.png" alt="创建节点对话框搜索 Label"><figcaption>创建节点对话框搜索 Label</figcaption></figure>
+<p>Label 是「显示一串文字」的节点。创建完，场景树变两层：</p>
+<figure><img src="../img/03/03_label_added.png" alt="Label 挂进场景树"><figcaption>Label 挂进场景树</figcaption></figure>
+<p>Node2D 底下多了个 Label——上篇讲的「节点组成树」，就是这么回事：Label 是挂在 Node2D 底下的子节点。</p>
+<p>接着喂文字：看右边检查器，最顶上有个 <strong>Text</strong> 属性，点输入框，打上 Hello, Godot!：</p>
+<figure><img src="../img/03/03_label_text.png" alt="视口里输入文字"><figcaption>视口里输入文字</figcaption></figure>
+<p>打完看中间视口，字已经出来了（就在坐标原点那，位置先不管）。</p>
+<h2>再见，F5</h2>
+<p><strong>Ctrl+S</strong> 存档，再按 <strong>F5</strong>：</p>
+<figure><img src="../img/03/03_hello_window.png" alt="游戏窗口显示 Hello, Godot!"><figcaption>游戏窗口显示 Hello, Godot!</figcaption></figure>
+<p>睇到未！左上角，白纸黑字，<strong>Hello, Godot!</strong></p>
+<p>这几行字技术含量约等于零，但意义唔一样：从「编辑器里的文件」到「跑起身嘅程序」，成条链路你走通咗。以后做再大的游戏，流程都是这条：改场景、存档、F5、看效果。</p>
+<h2>最后</h2>
+<p>今天三个收获：主场景是启动的默认入口，首次 F5 会被要求指定；F5 运行、关窗停止；节点树是可以长的——Label 往 Node2D 上一挂，树就开枝散叶了。</p>
+<p>不过你都发现咗：到而家全部系点鼠标，一行代码都冇写。想文字动起来、变色、同玩家互动？要代码上场喇。</p>
+<p>下一篇：《Godot 入门实战 04：GDScript 第一课》，正式开写第一行代码。</p>
+<p>呢篇帮你将游戏第一次跑起身，点赞 + 在看收下；想一路写到发布嘅，关注「山岚的运维笔记」。评论区吹水都得。</p>
+<p>下一篇见。</p>
+<p>（配套工程在 GitHub 的 Boxman 仓库 tutorial 分支，每篇一个进度 tag。）</p>
+</div></div></body></html>

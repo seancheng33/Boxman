@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>让小人「走一格」，可一格到底是多远？</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 06 篇</span></div>
+<div class="card">
+<h1 class="title">让小人「走一格」，可一格到底是多远？</h1>
+<div class="meta"><b>摘要</b>　精灵会站了，可它到底站在哪？今天把 Godot 的二维坐标系讲明白——原点在左上角、Y 轴朝下，再顺手把推箱子的「格子」算清楚。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>上一篇，那个歪歪扭扭的像素小人总算站进了屏幕。但你同佢讲「往右走一格」，佢一脸茫然——一格到底有几远？</p>
+<p>唔怪得佢。系我哋仲未畀佢一把尺。今天不聊动画，也不聊输入，就把这把尺子立起来。</p>
+<h2>Godot 的坐标系，跟中学那个不太一样</h2>
+<p>定位一个点，无非横一个数、竖一个数，这个你中学就学过。新鲜的是 Godot 的规矩：原点在左上角，X 往右长，Y 往下长。</p>
+<p>注意那个「往下」。你课本上的 Y 轴是朝上的，屏幕偏不，它从上往下数。所以越往下，Y 越大。第一次见会别扭，用两天自然就顺了。</p>
+<p>单位是像素。代码里写 position = (96, 64)，意思就是从父节点左上角算起，往右 96 像素、往下 64 像素。「父节点」这三个字别漏掉，子节点的坐标是相对父节点的，父节点一动，底下的全都跟着挪。</p>
+<figure><img src="../img/06/06_axes.png" alt="原点在左上角，X 向右、Y 向下"><figcaption>原点在左上角，X 向右、Y 向下</figcaption></figure>
+<p>顶边那条红线是 X 轴，左边那条绿线是 Y 轴，交点就是原点。格子每格 32 像素，刻度就按 0、64、128 这样跳。</p>
+<h2>一格到底多大</h2>
+<p>推箱子这种游戏，本质就是在方格纸上挪东西。所以第一步，得先定一格多大。</p>
+<p>我选 32 像素一格。为什么是 32？因为小人是 16×16，放大两倍刚好塞满一格，不用拿半像素去凑，看着舒服。</p>
+<p>插一句。有人喜欢 16 一格，有人非要 64，我试过 30，结果所有贴图永远差半格，怎么对都对不齐。折腾咗成个下午，最后老老实实返去 32。选择困难症，就系咁治好嘅。</p>
+<p>定了格子，换算就简单了：格子坐标乘 32，就是像素坐标。第 3 列第 2 行，就是 (96, 64)。图上那个小家伙，正正好站这一格：</p>
+<figure><img src="../img/06/06_run.png" alt="32×32 的网格，精灵站在 cell(3,2)"><figcaption>32×32 的网格，精灵站在 cell(3,2)</figcaption></figure>
+<p>黄框就是 cell(3,2)，左上角落在 (96,64)，跟我手算的对得上。</p>
+<p>反过来，给你像素坐标想知道在哪一格，除以 32 取整就行。要注意的是取整是截断，负数的时候得留个心眼，不过那是后话。</p>
+<h2>检查器里那两个数字</h2>
+<p>公式其实不用背。你在编辑器里选中精灵，右边检查器往下拉，Transform 里的 Position 就是这两个数：</p>
+<figure><img src="../img/06/06_editor.png" alt="编辑器里选中精灵，检查器显示 Position"><figcaption>编辑器里选中精灵，检查器显示 Position</figcaption></figure>
+<p>凑近看：</p>
+<figure><img src="../img/06/06_inspector.png" alt="Position 就是两个数字，x=96、y=64"><figcaption>Position 就是两个数字，x=96、y=64</figcaption></figure>
+<p>x=96、y=64，跟我算的一模一样。所以代码里写 position = (96,64)，跟这里手填是同一回事。区别只在于，代码能算，手填只能填。</p>
+<h2>编辑器也有网格，别浪费</h2>
+<p>2D 视图里本来就铺着一层淡淡的网格，只是默认不显眼。菜单「视图」里打开「显示网格」，快捷键是 Ctrl+G。</p>
+<p>更实用的是吸附。视图上方那排工具里有个磁铁图标，点开能设网格步长。设成 32，拖精灵嗰阵佢会「啪」一声贴到格线上，再都唔会停喺 96.3 呢种鬼地方。</p>
+<p>说个糗事。我早些年做关卡，最烦贴图差那么一两像素，那张图看着像被人从旁边推歪了。后来先明白，系我压根冇开吸附，全靠手抖。开咗之后，嗰个下午嘅憋屈算系白受。</p>
+<h2>这些线，其实是画出来的</h2>
+<p>有朋友问，你那网格拿什么素材贴的？</p>
+<p>冇素材，纯代码画嘅。建个 Node2D，挂上脚本，重写 _draw()，两个循环，一个画竖线一个画横线，想画什么画什么。这招以后做调试信息、画选中框都用得上。</p>
+<p>顺便提醒一句，_draw 只在系统要重绘的时候跑一次。你改了数据，得手动喊它一声，不然它就一直装死。</p>
+<h2>最后</h2>
+<p>今天其实就三句话。原点在左上角，X 往右、Y 往下。一格 32 像素，(3,2) 就是 (96,64)。编辑器有网格和吸附，记得开。</p>
+<p>尺子搞掂喇，小人而家清楚自己企喺边一格。但佢仲系未识郁——下一篇畀佢接上键盘，按一下走一格，咁先算真正跑起身。</p>
+<p>网格画好咗，点赞 + 在看安排上；关注「山岚的运维笔记」，下一篇畀佢走起来。</p>
+<p>下一篇见。</p>
+<p>（配套工程在 GitHub 的 Boxman 仓库 tutorial 分支，每篇一个进度 tag，搜 seancheng33/Boxman 就能找到。）</p>
+</div></div></body></html>

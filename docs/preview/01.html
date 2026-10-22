@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>我用一个 60MB 的压缩包，装好了人生第一个游戏引擎</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 01 篇</span></div>
+<div class="card">
+<h1 class="title">我用一个 60MB 的压缩包，装好了人生第一个游戏引擎</h1>
+<div class="meta"><b>摘要</b>　没有安装器、不用注册、解压就能跑——这篇带你 5 分钟搞定 Godot 的下载安装、中文界面和第一个项目。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>新系列今天开张。先立个 flag：接下来一段时间，我要带着完全零基础的你，从一个空文件夹开始，做出一个正儿八经的推箱子游戏——能选关、能存档，最后还能打包成 Windows 程序和网页游戏的那种。</p>
+<p>不需要会编程，不需要懂美术，甚至不需要知道"游戏引擎"是个啥。一篇只讲一件事，讲到明为止，你照住步骤做就冇问题。</p>
+<p>今日第一篇，先搞掂最容易劝退嗰关：装环境。</p>
+<h2>为啥是 Godot</h2>
+<p>做游戏嘅引擎唔少，我畀新手首推 Godot，理由讲出嚟有啲土：佢真系免费，而且细得离谱。</p>
+<p>免费到什么程度？有的引擎的套路是入门白送、你游戏赚钱了我抽成。Godot 系开源社区维护嘅，你拿佢做嘅游戏卖爆咗，人家一分钱都唔收。</p>
+<p>小到什么程度？官方下载一个 zip，解压出一个小 exe，没了。我出街成日将佢揣喺 U 盘度，想畀朋友睇就插上，几有当年带住绿色版软件出街嘅潇洒。</p>
+<p>写代码用的是 GDScript，跟 Python 长得像亲兄弟，后面系列里所有代码我都一行行带着敲，你只管抄。</p>
+<p>版本提醒：我们用的是 Godot 4.2.2。网上很多老教程是 3.x 的，接口对不上，跟敲必报错，看到记得绕道，别跟自己过不去。</p>
+<h2>安装，我尽量写得长一点</h2>
+<p>为啥说尽量写得长？因为真系冇嘢可写。</p>
+<p>官网 godotengine.org，点 Download，下 Windows 标准版，得到一个 zip。解压到纯英文路径，比如 D:\Godot，双击里面的 exe。</p>
+<p>没了。这就是全部。</p>
+<p>第一次打开是这个界面，叫项目管理器，你可以理解成"项目大厅"，以后你的游戏都住这里：</p>
+<figure><img src="../img/01/01_pm_first.png" alt="项目管理器首次启动"><figcaption>项目管理器首次启动</figcaption></figure>
+<p>它刚开还会热情地问要不要逛官方示例项目，点取消：</p>
+<figure><img src="../img/01/01_pm_empty_prompt.png" alt="零项目提示弹窗"><figcaption>零项目提示弹窗</figcaption></figure>
+<p>我哋系嚟自己动手嘅，唔逛别人家后花园。</p>
+<h2>切中文，三秒的事</h2>
+<p>冷知识：Godot 会自动跟着系统语言走。你是简体中文 Windows，打开就是中文，这节可以直接翻篇。</p>
+<p>看到英文界面的朋友，点项目管理器右上角的语言下拉，一长串列表会哗啦出来：</p>
+<figure><img src="../img/01/01_pm_language.png" alt="语言选择下拉"><figcaption>语言选择下拉</figcaption></figure>
+<p>滚到最底下，[zh_CN] Chinese, China 在等你，点它，当场变中文。设置自动记住，下不为例。</p>
+<h2>建第一个项目</h2>
+<p>回主界面，点左上角「+ 新建」，一屏选项看着挺吓人，其实就四处要看：</p>
+<figure><img src="../img/01/01_new_project_dialog.png" alt="新建项目对话框"><figcaption>新建项目对话框</figcaption></figure>
+<p>名称填 tutorial，跟我教程保持一致，以后代码好对照；路径选个英文的空文件夹；渲染器选最下面的「兼容」——2D 跑得最快，老显卡也带得动，以后导出网页版还得靠它，选贵的不如选对的；版本控制选「无」，现在开了只会提前生成一堆你看不懂的文件。</p>
+<p>点「创建并编辑」，编辑器就开出来了：</p>
+<figure><img src="../img/01/01_editor_first.png" alt="编辑器首次打开"><figcaption>编辑器首次打开</figcaption></figure>
+<p>恭喜，开发环境呢部分，你已经搞掂喇。中间那片先不用管，下一篇我带你把整个编辑器逛个遍。</p>
+<h2>最后</h2>
+<p>今日搞掂嘅活盘点：解压一个包，确认中文，白嫖一个空项目。没写一行代码，但"装环境"这关拦住的人，可比后面的代码拦住的多多了，你今天已经跳坑了。</p>
+<p>有用就点个赞、点一下在看；想跟埋全程嘅，关注「山岚的运维笔记」，有更新第一时间推畀你。评论区吹水啦，我逐条覆。</p>
+<p>下一篇见。</p>
+<p>（配套工程在 GitHub 的 Boxman 仓库 tutorial 分支，每篇一个进度 tag，随时下到对应版本。）</p>
+</div></div></body></html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>把地图写成几行字，撞墙判定就顺手搞掂了</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 08 篇</span></div>
+<div class="card">
+<h1 class="title">把地图写成几行字，撞墙判定就顺手搞掂了</h1>
+<div class="meta"><b>摘要</b>　小人会走了，可它还会穿墙。这篇给它一张真正的地图——几行字符串就是地图，走之前先问一句「那格能进吗」，越界一律当墙，撞上就原地不动。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>上一篇小人总算识行喇，不过佢有个毛病——识穿墙。向左按十下，佢就由画面左边溜出去，连声招呼都唔打。</p>
+<p>今日畀佢一张真正嘅地图，再教佢一件事：有啲地方，你去唔到。</p>
+<h2>地图不用画，敲几行字就行</h2>
+<p>做推箱子，最省事的地图不是画出来的，是敲出来的。</p>
+<p>一个字符串数组，每一行就是地图的一行。# 是墙，. 是地板。改地图就是改这几行字，比在编辑器里一块块摆砖头快得多，改完直接跑，也不用等它导入。</p>
+<p>画出来是这样：</p>
+<figure><img src="../img/08/08_run.png" alt="起点 cell(1,1)，四周一圈全是墙"><figcaption>起点 cell(1,1)，四周一圈全是墙</figcaption></figure>
+<p>凑近看，你就能对上号：</p>
+<figure><img src="../img/08/08_map.png" alt="放大看，# 是深色墙块，. 是更暗的地板"><figcaption>放大看，# 是深色墙块，. 是更暗的地板</figcaption></figure>
+<p>深色实心方块就是 #，更暗的是 .。数组里写了什么，画面上就是什么，一个字符对一格。</p>
+<p>至于画线、画砖块纹理那些，留到后面做视觉打磨再说。而家先将「边度行得」呢件事定死。</p>
+<h2>数组下标就是格子坐标</h2>
+<p>呢句值得单独讲，因为我喺呢度卡过。</p>
+<p>数组是一行一行存的，所以取一个格子要写成「第几行的第几列」——<strong>y 在前，x 在后</strong>。你习惯的那个顺序在这里是反的。</p>
+<p>我第一次就写反咗，人物沿住对角线乱窜，仲以为系输入映射配错。查咗半日，先发觉系行列写反。呢种错唔会报错，佢只会令你嘅人物行得好诡异。</p>
+<h2>走之前，先问一句</h2>
+<p>核心就一个函数，问「这格是墙吗」。它前半段管边界，后半段管墙，两件事塞一起，调用的时候根本不用分心。</p>
+<p>这里有个我很喜欢的偷懒写法：<strong>走出数组范围，就当它是墙</strong>。</p>
+<p>想想看，边界这东西，很多人会单独写一堆判断，散落在四个方向里，写四个漏一个。可边界说到底就是「地图外面那一圈不能走的地方」，跟墙是一回事。既然是一回事，就让它返回 true 好了，判定的地方一行都不用多写。</p>
+<h2>先算后判，别先走再退</h2>
+<p>这是今天最容易写错的地方。</p>
+<p>好多人（包括当年嘅我）会咁写：先行前一步，撞咗墙再退返嚟。看着也没毛病对吧？能跑。</p>
+<p>但它在给你埋雷。等你后面往格子里加箱子、加目标点，或者移动之后要播个动画、记一步撤销，「先走再退」就会变成「先改了三个地方，再挨个回滚三个地方」。漏一个，游戏状态就跟你的人物对不上。这种 bug 最难查，因为它只在特定顺序的操作下才冒出来。</p>
+<p>正确的做法是<strong>先把想去的地方算出来，问完再决定动不动</strong>。算出目标格，问一句「能进吗」，不能进就直接结束，什么都没发生过。干净，而且将来加什么都不用动这段逻辑。</p>
+<h2>跑起来，撞一下试试</h2>
+<p>我把人物放在 cell(1,1)，就是左上角那条走廊。头顶上那格是墙。</p>
+<p>按三次 W：</p>
+<figure><img src="../img/08/08_compare.png" alt="连按 3 次 W 撞墙，位置纹丝不动"><figcaption>连按 3 次 W 撞墙，位置纹丝不动</figcaption></figure>
+<p>左边是按之前，右边是按了三次之后。<strong>两张图一模一样</strong>——我比对过，像素级别的相同。按咗，冇动，咁就啱喇。</p>
+<p>然后换右边，走廊是空的，按四次 D：</p>
+<figure><img src="../img/08/08_move.png" alt="按 4 次 D，一路走到 cell(5,1)"><figcaption>按 4 次 D，一路走到 cell(5,1)</figcaption></figure>
+<p>从 (1,1) 走到 (5,1)，一格一格，不快不慢。</p>
+<p>编辑器里选中 Player，位置也跟着走：</p>
+<figure><img src="../img/08/08_editor.png" alt="编辑器里选中 Player，检查器显示位置"><figcaption>编辑器里选中 Player，检查器显示位置</figcaption></figure>
+<h2>两个小提醒</h2>
+<p>字符串取单个字符，记得用 substr 去截，别直接拿下标去和 # 比，类型对不上会静默失败——Godot 不报错，它就一直返回 false，你就一直能穿墙。</p>
+<p>还有，常量数组取出来的一行，赋值给变量时要写清楚它是字符串类型。不写的话 Godot 会甩你一个解析错误，说它推断不出类型。我第一次就畀呢个拦喺门外。</p>
+<h2>最后</h2>
+<p>今天三句话。地图就是字符串数组，# 是墙 . 是地板。越界当墙，边界和判定合一。先算目标格再判定，不通过就结束，千万别先走再退。</p>
+<p>而家小人撞墙识停喇，不过佢仲系个净系识自己行嘅孤魂。下一篇叫佢推箱子——推得动同推唔动，又系另一套判定。</p>
+<p>小人而家识得撞墙就停，抵一个点赞 + 在看；关注「山岚的运维笔记」，后面教佢推箱子。</p>
+<p>下一篇见。</p>
+<p>（配套工程在 GitHub 的 Boxman 仓库 tutorial 分支，每篇一个进度 tag，搜 seancheng33/Boxman 就能找到。）</p>
+</div></div></body></html>

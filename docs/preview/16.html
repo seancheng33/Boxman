@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>关卡一页放不下？翻页加预览，两手都要有</title><style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 12px 60px;
+  background: #ededed;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 690px; margin: 0 auto; }
+.bar {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; font-size: 13px; color: #888;
+  padding: 0 4px;
+}
+.bar a { color: #576b95; text-decoration: none; }
+.bar a:hover { text-decoration: underline; }
+.bar .sp { flex: 1; }
+.card {
+  background: #fff; border-radius: 6px;
+  padding: 26px 22px 34px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.meta {
+  border-left: 3px solid #cfe3d4; background: #f7fbf8;
+  padding: 10px 14px; margin: 0 0 26px; border-radius: 0 4px 4px 0;
+  font-size: 12.5px; line-height: 1.75; color: #7a8a80;
+}
+.meta b { color: #4f6b58; font-weight: 600; }
+h1.title {
+  font-size: 20px; line-height: 1.5; color: #1a1a1a;
+  margin: 0 0 22px; font-weight: 700;
+}
+h2 {
+  font-size: 17px; line-height: 1.6; color: #1a1a1a; font-weight: 700;
+  margin: 34px 0 16px; padding-left: 11px;
+  border-left: 4px solid #07c160; border-radius: 1px;
+}
+h3 { font-size: 16px; margin: 26px 0 12px; color: #1a1a1a; font-weight: 700; }
+p {
+  margin: 0 0 1.15em; font-size: 16px; line-height: 1.9;
+  color: #3f3f3f; letter-spacing: .4px; text-align: justify;
+}
+figure { margin: 22px 0 26px; }
+figure img {
+  display: block; max-width: 100%; height: auto; margin: 0 auto;
+  border-radius: 4px; border: 1px solid #f0f0f0;
+}
+figcaption {
+  margin-top: 9px; font-size: 12.5px; line-height: 1.6;
+  color: #9a9a9a; text-align: center; letter-spacing: .3px;
+}
+pre {
+  background: #f7f7f7; border: 1px solid #eee; border-radius: 6px;
+  padding: 14px 16px; overflow-x: auto; margin: 20px 0;
+}
+pre code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13.5px; line-height: 1.7; color: #333; white-space: pre;
+}
+strong { font-weight: 700; color: #1a1a1a; }
+.toc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toc a {
+  display: block; background: #fff; border-radius: 6px; padding: 14px 16px;
+  text-decoration: none; color: #2c2c2c; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  border: 1px solid #ececec;
+}
+.toc a:hover { border-color: #07c160; }
+.toc .no { font-size: 12px; color: #07c160; font-weight: 700; letter-spacing: 1px; }
+.toc .t { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+.toc .s { font-size: 12px; color: #999; margin-top: 6px; }
+h1.idx { font-size: 19px; margin: 0 0 6px; }
+p.sub { font-size: 13px; color: #888; margin: 0 0 20px; }
+@media (max-width: 560px) { .toc { grid-template-columns: 1fr; } }
+</style></head>
+<body><div class="wrap">
+<div class="bar"><a href="index.html">← 全部 24 篇</a><span class="sp"></span>
+<span>Godot 4 零基础教程 · 第 16 篇</span></div>
+<div class="card">
+<h1 class="title">关卡一页放不下？翻页加预览，两手都要有</h1>
+<div class="meta"><b>摘要</b>　一页放不下所有关卡怎么办？分页。点之前想先看一眼这关长什么样？实时预览。这篇只加两件事：翻页只改可见性不重建，预览靠焦点信号联动。顺带修一个真实的手感问题——灰掉的按钮会偷走 Tab 焦点。</div>
+<p>大家好，我是「山岚的运维笔记」。</p>
+<p>上一篇按钮网格做好咗，七个关卡一页摆得落。不过我手上嗰个完整版成两百几关，一页塞唔落。</p>
+<p>今日加两件事：分页，同实时预览——选关之前，先睇一眼呢关系咩样。</p>
+<h2>先看做成什么样</h2>
+<figure><img src="../img/16/16_grid.png" alt="选关第 1 页，左边按钮网格，右边预览框画着第 1 关的小地图"><figcaption>选关第 1 页，左边按钮网格，右边预览框画着第 1 关的小地图</figcaption></figure>
+<p>左边跟上一篇一样，右边多了个预览框，焦点在哪个按钮，它就画哪个关的缩略地图。翻到第 2 页，只剩第 7 关一个按钮，预览也跟着切过去。</p>
+<h2>分页：只改可见性，别手痒重建</h2>
+<p>七个关卡、一页六个，就是两页。这里有个新手常踩的写法：直接用整数除法算页数，七个除以六个得一，最后一关凭空消失。关卡数不是页大小的整数倍时，必须向上取整——六关一页时七关就是两页，最后一关独占一页。</p>
+<p>翻页改什么？上一篇说过"刷新别重建"，这里照样适用：七个按钮一次造齐，翻页只改每个按钮的可不可见。本页之内的显示，之外的藏起来。按钮仲喺场景树度，只系唔画，下次翻返嚟即刻用得，咩状态都唔会丢。</p>
+<p>翻页按钮两头也要管住：第一页不能往左翻，最后一页不能往右翻，到底了就把按钮变灰。这个"到底变灰"跟锁关按钮是同一个属性，一行的事。</p>
+<h2>一个实测才发现的坑</h2>
+<p>灰咗嘅按钮（disabled），照样可以用 Tab 聚焦！</p>
+<p>玩家一路按 Tab，焦点停在一个灰按钮上，按空格毫无反应，第一反应不是"这关锁了"，是"游戏卡了"。所以灰掉的按钮要顺手把它的焦点模式设成"不可聚焦"，Tab 直接跳过它，一次到位。</p>
+<p>呢种问题唔真机跑返一次根本发现唔到。我呢套截图全部系对住真系跑起上嚟嘅游戏，一下一下按键盘按出嚟，按按吓就按出咗呢个坑。</p>
+<h2>实时预览：焦点一动，地图就换</h2>
+<p>预览嘅核心就一句：焦点挪到边个按钮，右边就画嗰关。</p>
+<p>上一篇说过，方向键挪焦点、空格确认是引擎白送的。那"焦点变了"有没有信号？有——按钮拿到焦点的那一刻会发一个信号。造按钮的时候把它连上，又是上篇那个 bind 的套路：把"我是第几关"焊在信号上，焦点信号连预览，按下信号连进关，一个按钮两条信号各管各的。</p>
+<figure><img src="../img/16/16_focus3.png" alt="焦点挪到第 3 关，预览跟着换"><figcaption>焦点挪到第 3 关，预览跟着换</figcaption></figure>
+<p>预览画什么？把选中关卡的文本地图缩小画出来。第 12 篇讲过关卡是一行行字符串，# 是墙、$ 是箱子、点是目标点——预览就是逐字符往小格子里填色。套路跟画正地图一模一样，只是格子从三十二像素缩到十一像素，再居中一下。</p>
+<p>顺带数一数箱子数和目标点数，写进状态栏。数箱子这个活就是逐字符比对，"箱子在目标点上"这个符号两种都要算，漏了就数不平。</p>
+<figure><img src="../img/16/16_preview.png" alt="三关预览对比，第 1 / 3 / 7 关"><figcaption>三关预览对比，第 1 / 3 / 7 关</figcaption></figure>
+<h2>翻页实测</h2>
+<figure><img src="../img/16/16_page2.png" alt="翻到第 2 页，只剩第 7 关，预览切过去"><figcaption>翻到第 2 页，只剩第 7 关，预览切过去</figcaption></figure>
+<p>按 Tab 把焦点挪到「下一页」，按空格，翻页。留意状态栏：第 7 关、三个箱子、三个目标点，跟预览图对得上。</p>
+<h2>最后</h2>
+<p>这一篇就两个词：可见性翻页，焦点预览。</p>
+<p>关卡集合固定，翻页只是藏与显；预览不是新窗口，就是多画一张小地图；焦点信号让"看"跟着"选"走，一行输入代码都没写。</p>
+<p>到呢度，选关界面就完整喇。下一篇开始收拾画面：现在这个灰扑扑的格子阵实在配不上"游戏"二字——配色、染色、锁图标，全在下一篇「视觉打磨」里。</p>
+<p>选关完整版搞掂喇，值得<strong>点赞、在看</strong>来一套；想睇画面变靓嘅，<strong>关注「山岚的运维笔记」</strong>，下一篇接着。评论区有问必回。</p>
+</div></div></body></html>
