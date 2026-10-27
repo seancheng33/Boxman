@@ -18,7 +18,7 @@ import re
 import sys
 from collections import namedtuple
 
-PROJECT = "/Users/sean/GitLab/Boxman"
+PROJECT = "E:/godot/Boxman"
 LEVEL_DIR = os.path.join(PROJECT, "level")
 OUT_DIR = os.path.join(PROJECT, "levels_txt")
 TILE = 64
